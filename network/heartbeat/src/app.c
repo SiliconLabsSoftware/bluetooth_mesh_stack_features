@@ -57,13 +57,13 @@
 #define BLE_ADDR_LEN_BYTE (6)
 
 #define MAX_NUM_BTMESH_DEV (10)
-#define MAX_NUM_ROUTES ((MAX_NUM_BTMESH_DEV+1)*MAX_NUM_BTMESH_DEV)
+#define MAX_NUM_ROUTES ((MAX_NUM_BTMESH_DEV + 1) * MAX_NUM_BTMESH_DEV)
 
 node_registry_entry_t node_registry[MAX_NUM_BTMESH_DEV];
 route_registry_entry_t route_registry[MAX_NUM_ROUTES];
 
-static const uint8_t fixed_netkey[16] = {0x23, 0x98, 0xdf, 0xa5, 0x09, 0x3e, 0x74, 0xbb, 0xc2, 0x45, 0x1f, 0xae, 0xea, 0xd7, 0x67, 0xcd};
-static const uint8_t fixed_appkey[16] = {0x16, 0x39, 0x38, 0x03, 0x9b, 0x8d, 0x8a, 0x20, 0x81, 0x60, 0xa7, 0x93, 0x33, 0x3d, 0x03, 0x61};
+static const uint8_t fixed_netkey[16] = { 0x23, 0x98, 0xdf, 0xa5, 0x09, 0x3e, 0x74, 0xbb, 0xc2, 0x45, 0x1f, 0xae, 0xea, 0xd7, 0x67, 0xcd };
+static const uint8_t fixed_appkey[16] = { 0x16, 0x39, 0x38, 0x03, 0x9b, 0x8d, 0x8a, 0x20, 0x81, 0x60, 0xa7, 0x93, 0x33, 0x3d, 0x03, 0x61 };
 
 static uint8_t network_id = 0x0;
 static uint16_t appkey_index = 0x0;
@@ -160,7 +160,7 @@ static void set_device_name(bd_addr *addr)
                                                0,
                                                strlen(name),
                                                (uint8_t *)name);
-  if(sc) {
+  if (sc) {
     app_log("sl_bt_gatt_server_write_attribute_value() failed, code %lx\r\n", sc);
   }
 }
@@ -173,7 +173,7 @@ static void set_device_name(bd_addr *addr)
 bool handle_reset_conditions(void)
 {
   // If PB0 is held down then do full factory reset
-  if(sl_simple_button_get_state(&sl_button_btn0) == SL_SIMPLE_BUTTON_PRESSED) {
+  if (sl_simple_button_get_state(&sl_button_btn0) == SL_SIMPLE_BUTTON_PRESSED) {
     // Full factory reset
     sl_btmesh_initiate_full_reset();
     return false;
@@ -181,7 +181,7 @@ bool handle_reset_conditions(void)
 
 #ifndef SINGLE_BUTTON
   // If PB1 is held down then do node factory reset
-  if(sl_simple_button_get_state(&sl_button_btn1) == SL_SIMPLE_BUTTON_PRESSED) {
+  if (sl_simple_button_get_state(&sl_button_btn1) == SL_SIMPLE_BUTTON_PRESSED) {
     // Node factory reset
     sl_btmesh_initiate_node_reset();
     return false;
@@ -235,21 +235,19 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       break;
     case sl_bt_evt_gatt_server_user_write_request_id:
       //app_log("sl_bt_evt_gatt_server_user_write_request_id\r\n");
-      if(evt->data.evt_gatt_server_user_write_request.characteristic == gattdb_mesh_custom_data_in) {
-        switch(evt->data.evt_gatt_server_user_write_request.value.data[0]) {
+      if (evt->data.evt_gatt_server_user_write_request.characteristic == gattdb_mesh_custom_data_in) {
+        switch (evt->data.evt_gatt_server_user_write_request.value.data[0]) {
           case PROVISION_DEVICE: {
-
             uuid_128 uuid;
             memcpy(uuid.data, &evt->data.evt_gatt_server_user_write_request.value.data[1], 16);
             /* provisioning using ADV bearer (this is the default) */
             sl_btmesh_prov_create_provisioning_session(network_id, uuid, 0);
             sc = sl_btmesh_prov_provision_adv_device(uuid);
-            if(sc == SL_STATUS_OK) {
+            if (sc == SL_STATUS_OK) {
               app_log("Provisioning success: ");
             } else {
               app_log("Provisioning fail %lX: ", sc);
             }
-
           } break;
           case REMAP_NETWORK: {
             start_full_mapping();
@@ -266,10 +264,12 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       }
 
       // Send the Node infos, if notification is enabled
-      if(notification_enabled) {
-        for(uint8_t node_registry_id = 0; node_registry_id < MAX_NUM_BTMESH_DEV; node_registry_id++) {
+      if (notification_enabled) {
+        for (uint8_t node_registry_id = 0; node_registry_id < MAX_NUM_BTMESH_DEV; node_registry_id++) {
           // Jump out at the end of the registry
-          if(node_registry[node_registry_id].address == 0x0) break;
+          if (node_registry[node_registry_id].address == 0x0) {
+            break;
+          }
 
           struct __attribute__((packed)) { // 19 bytes
             uint8_t   type;
@@ -282,16 +282,16 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
           };
 
           sc = sl_bt_gatt_server_send_notification(proxy_connection,
-                                                    gattdb_mesh_custom_data_out,
-                                                    sizeof(payload),
-                                                    (uint8_t *)&payload);
+                                                   gattdb_mesh_custom_data_out,
+                                                   sizeof(payload),
+                                                   (uint8_t *)&payload);
 
-          if(sc != SL_STATUS_OK) {
+          if (sc != SL_STATUS_OK) {
             /* Something went wrong */
             app_log("sl_bt_gatt_server_send_notification: failed 0x%.2lx\r\n", sc);
           } //else {
-          //  app_log("Success, sl_bt_gatt_server_send_notification: 0x%.2lx\r\n", sc);
-          //}
+            //  app_log("Success, sl_bt_gatt_server_send_notification: 0x%.2lx\r\n", sc);
+            //}
         }
 
         start_full_mapping();
@@ -306,7 +306,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
                                                      route_registry[route_registry_id].target_address,
                                                      &handle);
 
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
         app_log("sl_btmesh_config_client_get_heartbeat_sub: failed 0x%.2lx\r\n", sc);
       } else {
@@ -317,8 +317,8 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       break;
     default:
       app_log("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF));
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF));
       break;
   }
 }
@@ -342,7 +342,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       sc = sl_btmesh_prov_create_network(network_id,
                                          16,
                                          fixed_netkey);
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
         app_log("sl_btmesh_prov_create_network: failed 0x%.2lx\r\n", sc);
       } else {
@@ -360,7 +360,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                         max_application_key_size,
                                         &application_key_len,
                                         application_key);
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
         app_log("sl_btmesh_prov_create_appkey: failed 0x%.2lx\r\n", sc);
       } else {
@@ -381,7 +381,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
 
       sc = sl_btmesh_node_get_element_address(0,
                                               &provisioner_address);
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
         app_log("sl_btmesh_node_get_element_address: failed 0x%.2lx\r\n", sc);
       } else {
@@ -392,7 +392,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                                   provisioner_address,
                                                   1,
                                                   &handle);
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
         app_log("sl_btmesh_config_client_set_gatt_proxy: failed 0x%.2lx\r\n", sc);
       } else {
@@ -405,7 +405,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                                    sizeof(provisioner_address),
                                                    (uint8_t *)&provisioner_address);
 
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
         app_log("sl_bt_gatt_server_write_attribute_value: failed 0x%.2lx\r\n", sc);
       } else {
@@ -420,13 +420,11 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
     break;
     case sl_btmesh_evt_prov_initialization_failed_id:
       app_log("sl_btmesh_evt_prov_initialization_failed_id failed: 0x%x ", evt->data.evt_prov_initialization_failed.result);
-    break;
+      break;
     case sl_btmesh_evt_prov_unprov_beacon_id:
       /* PB-ADV only */
-      if(0 == evt->data.evt_prov_unprov_beacon.bearer) {
-
-        if(is_webbrowser_ready()) {
-
+      if (0 == evt->data.evt_prov_unprov_beacon.bearer) {
+        if (is_webbrowser_ready()) {
           struct {
             uint8_t   type;
             bd_addr   address;
@@ -444,12 +442,12 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                                    sizeof(payload),
                                                    (uint8_t *)&payload);
 
-          if(sc != SL_STATUS_OK) {
+          if (sc != SL_STATUS_OK) {
             /* Something went wrong */
             app_log("sl_bt_gatt_server_send_notification: failed 0x%.2lx\r\n", sc);
           } //else {
-          //  app_log("Success, sl_bt_gatt_server_send_notification: 0x%.2lx\r\n", sc);
-          //}
+            //  app_log("Success, sl_bt_gatt_server_send_notification: 0x%.2lx\r\n", sc);
+            //}
         }
       }
 
@@ -462,27 +460,26 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
 
       uint8_t node_registry_id = 0;
 
-      for(node_registry_id = 0; node_registry_id < MAX_NUM_BTMESH_DEV; node_registry_id++) {
+      for (node_registry_id = 0; node_registry_id < MAX_NUM_BTMESH_DEV; node_registry_id++) {
         // The check index is empty
-        if(node_registry[node_registry_id].address == 0) {
-            node_registry[node_registry_id].address = evt->data.evt_prov_device_provisioned.address;
-            memcpy(&node_registry[node_registry_id].uuid.data[0], &evt->data.evt_prov_device_provisioned.uuid.data[0], BLE_MESH_UUID_LEN_BYTE);
-            break;
+        if (node_registry[node_registry_id].address == 0) {
+          node_registry[node_registry_id].address = evt->data.evt_prov_device_provisioned.address;
+          memcpy(&node_registry[node_registry_id].uuid.data[0], &evt->data.evt_prov_device_provisioned.uuid.data[0], BLE_MESH_UUID_LEN_BYTE);
+          break;
         }
         // The checked index has the address of the current device
-        if(node_registry[node_registry_id].address == evt->data.evt_prov_device_provisioned.address) {
-            app_log("Node already provisioned before: 0x%x\r\n", evt->data.evt_prov_device_provisioned.address);
-            break;
+        if (node_registry[node_registry_id].address == evt->data.evt_prov_device_provisioned.address) {
+          app_log("Node already provisioned before: 0x%x\r\n", evt->data.evt_prov_device_provisioned.address);
+          break;
         }
       }
 
-      if(node_registry_id == MAX_NUM_BTMESH_DEV) {
+      if (node_registry_id == MAX_NUM_BTMESH_DEV) {
         app_log("Node registry size limit exceeded: %d\r\n", MAX_NUM_BTMESH_DEV);
         return;
       }
 
-      if(is_webbrowser_ready()) {
-
+      if (is_webbrowser_ready()) {
         struct __attribute__((packed)) { // 19 bytes
           uint8_t   type;
           uint16_t  address;
@@ -494,16 +491,16 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
         };
 
         sc = sl_bt_gatt_server_send_notification(proxy_connection,
-                                                  gattdb_mesh_custom_data_out,
-                                                  sizeof(payload),
-                                                  (uint8_t *)&payload);
+                                                 gattdb_mesh_custom_data_out,
+                                                 sizeof(payload),
+                                                 (uint8_t *)&payload);
 
-        if(sc != SL_STATUS_OK) {
+        if (sc != SL_STATUS_OK) {
           /* Something went wrong */
           app_log("sl_bt_gatt_server_send_notification: failed 0x%.2lx\r\n", sc);
         } //else {
-        //  app_log("Success, sl_bt_gatt_server_send_notification: 0x%.2lx\r\n", sc);
-        //}
+          //  app_log("Success, sl_bt_gatt_server_send_notification: 0x%.2lx\r\n", sc);
+          //}
       }
 
       memset(&route_registry, 0x00, (sizeof(route_registry_entry_t) * MAX_NUM_ROUTES));
@@ -516,11 +513,15 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       route_registry[route_registry_id].checked = false;
       route_registry_id++;
 
-      for(uint8_t node_registry_id = 0; node_registry_id < MAX_NUM_BTMESH_DEV; node_registry_id++) {
+      for (uint8_t node_registry_id = 0; node_registry_id < MAX_NUM_BTMESH_DEV; node_registry_id++) {
         // Jump out at the end of the registry
-        if(node_registry[node_registry_id].address == 0x0) break;
+        if (node_registry[node_registry_id].address == 0x0) {
+          break;
+        }
         // Jump out if it would be a self-loop route
-        if(node_registry[node_registry_id].address == evt->data.evt_prov_device_provisioned.address) break;
+        if (node_registry[node_registry_id].address == evt->data.evt_prov_device_provisioned.address) {
+          break;
+        }
 
         route_registry[route_registry_id].source_address = node_registry[node_registry_id].address;
         route_registry[route_registry_id].target_address = evt->data.evt_prov_device_provisioned.address;
@@ -552,31 +553,30 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
               evt->data.evt_config_client_heartbeat_sub_status.min_hops,
               evt->data.evt_config_client_heartbeat_sub_status.max_hops);
 
-      if(evt->data.evt_config_client_heartbeat_sub_status.count_log > 0 &&
-         evt->data.evt_config_client_heartbeat_sub_status.result == SL_STATUS_OK) {
-
-
+      if (evt->data.evt_config_client_heartbeat_sub_status.count_log > 0
+          && evt->data.evt_config_client_heartbeat_sub_status.result == SL_STATUS_OK) {
         uint16_t next_route_registry_id = 0;
-        for(uint16_t route_registry_id = 0; route_registry_id < MAX_NUM_ROUTES; route_registry_id++) {
+        for (uint16_t route_registry_id = 0; route_registry_id < MAX_NUM_ROUTES; route_registry_id++) {
           // Skip, if we already checked this route
-          if(route_registry[route_registry_id].checked == true) continue;
+          if (route_registry[route_registry_id].checked == true) {
+            continue;
+          }
           // If the route is same in both directions, mark both of them checked
-          if((route_registry[route_registry_id].source_address == evt->data.evt_config_client_heartbeat_sub_status.source_address &&
-            route_registry[route_registry_id].target_address == evt->data.evt_config_client_heartbeat_sub_status.destination_address) ||
-            (route_registry[route_registry_id].source_address == evt->data.evt_config_client_heartbeat_sub_status.destination_address &&
-            route_registry[route_registry_id].target_address == evt->data.evt_config_client_heartbeat_sub_status.source_address)) {
+          if ((route_registry[route_registry_id].source_address == evt->data.evt_config_client_heartbeat_sub_status.source_address
+               && route_registry[route_registry_id].target_address == evt->data.evt_config_client_heartbeat_sub_status.destination_address)
+              || (route_registry[route_registry_id].source_address == evt->data.evt_config_client_heartbeat_sub_status.destination_address
+                  && route_registry[route_registry_id].target_address == evt->data.evt_config_client_heartbeat_sub_status.source_address)) {
             route_registry[route_registry_id].checked = true;
             continue;
           }
           // If we did not check this route yet, save it to be checked next (should not be the first route)
-          if(route_registry[route_registry_id].checked == false && next_route_registry_id == 0) {
+          if (route_registry[route_registry_id].checked == false && next_route_registry_id == 0) {
             next_route_registry_id = route_registry_id;
             continue;
           }
         }
 
-        if(is_webbrowser_ready()) {
-
+        if (is_webbrowser_ready()) {
           struct __attribute__((packed)) { //
             uint8_t   type;
             uint16_t  source_address;
@@ -596,12 +596,12 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                                    sizeof(payload),
                                                    (uint8_t *)&payload);
 
-          if(sc != SL_STATUS_OK) {
+          if (sc != SL_STATUS_OK) {
             /* Something went wrong */
             app_log("sl_bt_gatt_server_send_notification: failed 0x%.2lx\r\n", sc);
           } //else {
-          //  app_log("Success, sl_bt_gatt_server_send_notification: 0x%.2lx\r\n", sc);
-          //}
+            //  app_log("Success, sl_bt_gatt_server_send_notification: 0x%.2lx\r\n", sc);
+            //}
         }
 
         find_route(next_route_registry_id);
@@ -610,8 +610,8 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       break;
     default:
       app_log("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF));
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF));
       break;
   }
 
@@ -631,9 +631,11 @@ void start_full_mapping()
 
   uint16_t route_registry_id = 0;
 
-  for(uint8_t node_registry_id_outer = 0; node_registry_id_outer < MAX_NUM_BTMESH_DEV; node_registry_id_outer++) {
+  for (uint8_t node_registry_id_outer = 0; node_registry_id_outer < MAX_NUM_BTMESH_DEV; node_registry_id_outer++) {
     // Jump out at the end of the registry
-    if(node_registry[node_registry_id_outer].address == 0x0) break;
+    if (node_registry[node_registry_id_outer].address == 0x0) {
+      break;
+    }
 
     // Add the Provisioner check
     route_registry[route_registry_id].source_address = node_registry[node_registry_id_outer].address;
@@ -641,11 +643,15 @@ void start_full_mapping()
     route_registry[route_registry_id].checked = false;
     route_registry_id++;
 
-    for(uint8_t node_registry_id_inner = 0; node_registry_id_inner < MAX_NUM_BTMESH_DEV; node_registry_id_inner++) {
+    for (uint8_t node_registry_id_inner = 0; node_registry_id_inner < MAX_NUM_BTMESH_DEV; node_registry_id_inner++) {
       // Jump out at the end of the registry
-      if(node_registry[node_registry_id_inner].address == 0x0) break;
+      if (node_registry[node_registry_id_inner].address == 0x0) {
+        break;
+      }
       // Jump out if it would be a self-loop route
-      if(node_registry[node_registry_id_outer].address == node_registry[node_registry_id_inner].address) break;
+      if (node_registry[node_registry_id_outer].address == node_registry[node_registry_id_inner].address) {
+        break;
+      }
 
       route_registry[route_registry_id].source_address = node_registry[node_registry_id_outer].address;
       route_registry[route_registry_id].target_address = node_registry[node_registry_id_inner].address;
@@ -664,10 +670,12 @@ void find_route(uint16_t route_registry_id)
   static uint16_t callback_data;
   callback_data = route_registry_id;
 
-  if(route_registry_id >= MAX_NUM_ROUTES ||
-     route_registry[route_registry_id].checked == true ||
-     route_registry[route_registry_id].source_address == 0x0 ||
-     route_registry[route_registry_id].target_address == 0x0) return;
+  if (route_registry_id >= MAX_NUM_ROUTES
+      || route_registry[route_registry_id].checked == true
+      || route_registry[route_registry_id].source_address == 0x0
+      || route_registry[route_registry_id].target_address == 0x0) {
+    return;
+  }
 
   sc = sl_btmesh_config_client_set_heartbeat_sub(0,
                                                  route_registry[route_registry_id].target_address,
@@ -676,7 +684,7 @@ void find_route(uint16_t route_registry_id)
                                                  0x05,
                                                  &handle);
 
-  if(sc != SL_STATUS_OK) {
+  if (sc != SL_STATUS_OK) {
     /* Something went wrong */
     app_log("sl_btmesh_config_client_set_heartbeat_sub: failed 0x%.2lx\r\n", sc);
   } else {
@@ -693,7 +701,7 @@ void find_route(uint16_t route_registry_id)
                                                  0x0,
                                                  &handle);
 
-  if(sc != SL_STATUS_OK) {
+  if (sc != SL_STATUS_OK) {
     /* Something went wrong */
     app_log("sl_btmesh_config_client_set_heartbeat_pub: failed 0x%.2lx\r\n", sc);
   } else {
@@ -707,7 +715,7 @@ void find_route(uint16_t route_registry_id)
                                              0,
                                              0);
 
-  if(sc != SL_STATUS_OK) {
+  if (sc != SL_STATUS_OK) {
     /* Something went wrong */
     app_log("sl_sleeptimer_start_periodic_timer_ms: failed 0x%.2lx\r\n", sc);
   } else {

@@ -1,38 +1,38 @@
 /***************************************************************************//**
  * @file  app.c
  * @brief Application code
-*******************************************************************************
-* # License
-* <b>Copyright 2020 Silicon Laboratories Inc. www.silabs.com</b>
-*******************************************************************************
-*
-* SPDX-License-Identifier: Zlib
-*
-* The licensor of this software is Silicon Laboratories Inc.
-*
-* This software is provided \'as-is\', without any express or implied
-* warranty. In no event will the authors be held liable for any damages
-* arising from the use of this software.
-*
-* Permission is granted to anyone to use this software for any purpose,
-* including commercial applications, and to alter it and redistribute it
-* freely, subject to the following restrictions:
-*
-* 1. The origin of this software must not be misrepresented; you must not
-*    claim that you wrote the original software. If you use this software
-*    in a product, an acknowledgment in the product documentation would be
-*    appreciated but is not required.
-* 2. Altered source versions must be plainly marked as such, and must not be
-*    misrepresented as being the original software.
-* 3. This notice may not be removed or altered from any source distribution.
-*
-*******************************************************************************
-* # Experimental Quality
-* This code has not been formally tested and is provided as-is. It is not
-* suitable for production environments. In addition, this code will not be
-* maintained and there may be no bug maintenance planned for these resources.
-* Silicon Labs may update projects from time to time.
-******************************************************************************/
+ *******************************************************************************
+ * # License
+ * <b>Copyright 2020 Silicon Laboratories Inc. www.silabs.com</b>
+ *******************************************************************************
+ *
+ * SPDX-License-Identifier: Zlib
+ *
+ * The licensor of this software is Silicon Laboratories Inc.
+ *
+ * This software is provided \'as-is\', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ *
+ *******************************************************************************
+ * # Experimental Quality
+ * This code has not been formally tested and is provided as-is. It is not
+ * suitable for production environments. In addition, this code will not be
+ * maintained and there may be no bug maintenance planned for these resources.
+ * Silicon Labs may update projects from time to time.
+ ******************************************************************************/
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -377,24 +377,21 @@ static void print_scan_resp(sl_bt_evt_scanner_legacy_advertisement_report_t *pRe
   // (UUID 0x1828)
 
   // 020106-03032818-1416281801fd65f619452875558774bc
-  const uint8_t proxy_UUID[16] = {0x28, 0x18};
+  const uint8_t proxy_UUID[16] = { 0x28, 0x18 };
 
   int i = 0;
   int ad_match_found = 0;
   int ad_len;
   int ad_type;
 
-  while (i < (pResp->data.len - 1))
-  {
+  while (i < (pResp->data.len - 1)) {
     ad_len  = pResp->data.data[i];
-    ad_type = pResp->data.data[i+1];
+    ad_type = pResp->data.data[i + 1];
 
-    if (ad_type == 0x03)
-    {
+    if (ad_type == 0x03) {
       // type 0x03= Complete List of 16-bit Service Class UUIDs
 
-      if(memcmp(proxy_UUID, &(pResp->data.data[i+2]),2) == 0)
-      {
+      if (memcmp(proxy_UUID, &(pResp->data.data[i + 2]), 2) == 0) {
         ad_match_found = 1;
       }
     }
@@ -403,10 +400,8 @@ static void print_scan_resp(sl_bt_evt_scanner_legacy_advertisement_report_t *pRe
     i = i + ad_len + 1;
   }
 
-  if(ad_match_found)
-  {
-    for(i=5;i>=0;i--)
-    {
+  if (ad_match_found) {
+    for (i = 5; i >= 0; i--) {
       app_log("%2.2x", pResp->address.addr[i]);
     }
     app_log(", RSSI: %d\r\n", pResp->rssi);

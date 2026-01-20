@@ -72,9 +72,9 @@
 #define UINT8_ARRAY_DUMP(array_base, array_size)                                    \
   do {                                                                              \
     for (int i_log_exlusive = 0; i_log_exlusive < (array_size); i_log_exlusive++) { \
-      app_log((i_log_exlusive + 1) % 16 ? "%02X " : "%02X\r\n",                        \
-             ((char*)(array_base))[i_log_exlusive]); }                              \
-    app_log("\r\n");                                                                   \
+      app_log((i_log_exlusive + 1) % 16 ? "%02X " : "%02X\r\n",                     \
+              ((char*)(array_base))[i_log_exlusive]); }                             \
+    app_log("\r\n");                                                                \
   } while (0)
 
 /// High Priority
@@ -123,7 +123,7 @@
 #define TIMER_ID_DELAY_PROXY_CONN           63
 #define DELAY_PROXY_CONN_IN_TICKS           (1 * 32768)
 
-static const bd_addr target_server_node_bd_addr = {{0xa1, 0x92, 0xc5, 0xf9, 0xe3, 0xb4}};
+static const bd_addr target_server_node_bd_addr = { { 0xa1, 0x92, 0xc5, 0xf9, 0xe3, 0xb4 } };
 
 /*******************************************************************************
  * Timer handles defines.
@@ -145,8 +145,6 @@ static app_timer_t app_led_blinking_timer;
 // periodic timer callback
 static void app_led_blinking_timer_cb(app_timer_t *handle, void *data);
 
-
-
 /*******************************************************************************
  * Global variables
  ******************************************************************************/
@@ -160,8 +158,6 @@ static uint8_t conn_handle = 0xFF;
 static uint8_t num_connections = 0;
 /// Init flag
 static bool init_done = false;
-
-
 
 /*******************************************************************************
  * Application Init.
@@ -346,15 +342,15 @@ static void demo_set_whitelist(uint8_t count)
   switch (count) {
     case 0:
       sl_btmesh_proxy_allow(
-                proxy_handle,
-                0,
-                0xC021);
+        proxy_handle,
+        0,
+        0xC021);
       break;
     case 1:
       sl_btmesh_proxy_allow(
-                proxy_handle,
-                0,
-                0xC02F);
+        proxy_handle,
+        0,
+        0xC02F);
       break;
     default:
       break;
@@ -367,15 +363,15 @@ static void demo_set_blacklist(uint8_t count)
   switch (count) {
     case 0:
       sl_btmesh_proxy_deny(
-                proxy_handle,
-                0,
-                0xC021);
+        proxy_handle,
+        0,
+        0xC021);
       break;
     case 1:
       sl_btmesh_proxy_deny(
-                proxy_handle,
-                0,
-                0xC02F);
+        proxy_handle,
+        0,
+        0xC02F);
       break;
     default:
       break;
@@ -392,9 +388,9 @@ static void proxy_set_filter_type(uint8_t filter_type)
 {
   /* Below example to use whitelist */
   sl_btmesh_proxy_set_filter_type(
-            proxy_handle,
-            0,
-            filter_type);
+    proxy_handle,
+    0,
+    filter_type);
   app_log_debug("Proxy filter configured.\r\n");
 }
 
@@ -405,7 +401,7 @@ static void mesh_proxy_client_setting(void)
   /* Configure the PB-ADV bearer state */
   sl_btmesh_test_set_adv_bearer_state(ADV_BEARER_STATE);
   app_log("ADV Bearer State - %s\r\n",
-       ADV_BEARER_STATE ? "ON" : "OFF");
+          ADV_BEARER_STATE ? "ON" : "OFF");
 
   /* Make sure gatt proxy feature is ON */
   uint8_t en = 1;
@@ -427,13 +423,13 @@ static void start_scan(void)
 
   /* Set up discovery, including timing, type, then start discovery */
   sl_bt_scanner_set_parameters(
-            SCAN_TYPE,
-            SCAN_INTERVAL,
-            SCAN_WINDOW);
+    SCAN_TYPE,
+    SCAN_INTERVAL,
+    SCAN_WINDOW);
 
   sl_bt_scanner_start(
-            sl_bt_gap_phy_1m,
-            sl_bt_scanner_discover_generic);
+    sl_bt_gap_phy_1m,
+    sl_bt_scanner_discover_generic);
   app_log_debug("Scan Enabled.\r\n");
 }
 
@@ -460,71 +456,70 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       break;
 
     case sl_bt_evt_connection_closed_id:
-     {
-       handle_le_connection_events(evt);
+    {
+      handle_le_connection_events(evt);
 
-       app_log_warning("evt:sl_bt_evt_connection_closed_id, reason 0x%x\r\n",
-                       evt->data.evt_connection_closed.reason);
+      app_log_warning("evt:sl_bt_evt_connection_closed_id, reason 0x%x\r\n",
+                      evt->data.evt_connection_closed.reason);
 
-       conn_handle = 0xFF;
-       app_timer_start(&app_timer_handle_delay_proxy_conn_2,
-                       0,
-                       app_timer_callback,
-                       (void*)TIMER_ID_DELAY_PROXY_CONN,
-                       false);
+      conn_handle = 0xFF;
+      app_timer_start(&app_timer_handle_delay_proxy_conn_2,
+                      0,
+                      app_timer_callback,
+                      (void*)TIMER_ID_DELAY_PROXY_CONN,
+                      false);
 
-       if (num_connections > 0) {
-         if (--num_connections == 0) {
-           char buf[30];
-           memset(buf, 0, 30);
-           sprintf(buf, "Reason = %x", evt->data.evt_connection_closed.reason);
-           lcd_print(buf, SL_BTMESH_WSTK_LCD_ROW_CONNECTION_CFG_VAL);
-           start_scan();
-         }
-       }
-     }
-     break;
+      if (num_connections > 0) {
+        if (--num_connections == 0) {
+          char buf[30];
+          memset(buf, 0, 30);
+          sprintf(buf, "Reason = %x", evt->data.evt_connection_closed.reason);
+          lcd_print(buf, SL_BTMESH_WSTK_LCD_ROW_CONNECTION_CFG_VAL);
+          start_scan();
+        }
+      }
+    }
+    break;
 
     case sl_bt_evt_system_boot_id:
-       handle_boot_event();
-       break;
+      handle_boot_event();
+      break;
 
-     case sl_bt_evt_system_external_signal_id:
-     {
-       switch (evt->data.evt_system_soft_timer.handle) {
+    case sl_bt_evt_system_external_signal_id:
+    {
+      switch (evt->data.evt_system_soft_timer.handle) {
+        case TIMER_ID_RESTART:
+          app_log("TIMER_ID_RESTART\r\n");
+          // Restart timer expires, reset the device
+          sl_bt_system_reboot();
+          break;
 
-         case TIMER_ID_RESTART:
-           app_log("TIMER_ID_RESTART\r\n");
-           // Restart timer expires, reset the device
-           sl_bt_system_reboot();
-           break;
+        case TIMER_ID_DELAY_TURN_OFF_ADV_BEARER:
+          app_log("TIMER_ID_DELAY_TURN_OFF_ADV_BEARER\r\n");
+          mesh_proxy_client_setting();
+          start_scan();
+          break;
 
-         case TIMER_ID_DELAY_TURN_OFF_ADV_BEARER:
-           app_log("TIMER_ID_DELAY_TURN_OFF_ADV_BEARER\r\n");
-           mesh_proxy_client_setting();
-           start_scan();
-           break;
+        case TIMER_ID_DELAY_PROXY_CONN:
+          app_log("TIMER_ID_DELAY_PROXY_CONN\r\n");
+          initiate_proxy_connection(0);
+          break;
 
-         case TIMER_ID_DELAY_PROXY_CONN:
-           app_log("TIMER_ID_DELAY_PROXY_CONN\r\n");
-           initiate_proxy_connection(0);
-           break;
+        default:
+          break;
+      }
+    }
+    break;
 
-         default:
-           break;
-       }
-     }
-     break;
+    case sl_bt_evt_scanner_legacy_advertisement_report_id:
+      if (num_connections == 0) {
+        on_adv_scanned(&evt->data.evt_scanner_legacy_advertisement_report);
+      }
+      break;
 
-     case sl_bt_evt_scanner_legacy_advertisement_report_id:
-       if (num_connections == 0) {
-         on_adv_scanned(&evt->data.evt_scanner_legacy_advertisement_report);
-       }
-       break;
-
-     default:
-       app_log("Unhandled evt:%lx\r\n", SL_BT_MSG_ID(evt->header));
-       break;
+    default:
+      app_log("Unhandled evt:%lx\r\n", SL_BT_MSG_ID(evt->header));
+      break;
   }
 }
 
@@ -624,30 +619,30 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       break;
 
     case sl_btmesh_evt_proxy_connected_id:
-     lcd_print("Proxy connected", SL_BTMESH_WSTK_LCD_ROW_FRIEND_CFG_VAL);
-     app_log_info("Proxy connection (handle = 0x%lx) established.\r\n",
-                  evt->data.evt_proxy_connected.handle);
-     proxy_handle = evt->data.evt_proxy_connected.handle;
-     proxy_set_filter_type(PROXY_FILTER_BLACKLIST);
-     break;
+      lcd_print("Proxy connected", SL_BTMESH_WSTK_LCD_ROW_FRIEND_CFG_VAL);
+      app_log_info("Proxy connection (handle = 0x%lx) established.\r\n",
+                   evt->data.evt_proxy_connected.handle);
+      proxy_handle = evt->data.evt_proxy_connected.handle;
+      proxy_set_filter_type(PROXY_FILTER_BLACKLIST);
+      break;
 
-   case sl_btmesh_evt_proxy_disconnected_id:
-     lcd_print("Proxy disconnected", SL_BTMESH_WSTK_LCD_ROW_FRIEND_CFG_VAL);
-     app_log_warning("Proxy connection (handle = 0x%lx) closed. Reason = 0x%04x\r\n",
-                     evt->data.evt_proxy_disconnected.handle,
-                     evt->data.evt_proxy_disconnected.reason);
-     proxy_handle = 0xffff;
-     break;
+    case sl_btmesh_evt_proxy_disconnected_id:
+      lcd_print("Proxy disconnected", SL_BTMESH_WSTK_LCD_ROW_FRIEND_CFG_VAL);
+      app_log_warning("Proxy connection (handle = 0x%lx) closed. Reason = 0x%04x\r\n",
+                      evt->data.evt_proxy_disconnected.handle,
+                      evt->data.evt_proxy_disconnected.reason);
+      proxy_handle = 0xffff;
+      break;
 
-   case sl_btmesh_evt_proxy_filter_status_id:
-     app_log("Filter length = %d\r\n",
-          evt->data.evt_proxy_filter_status.count);
-     proxy_configuration(evt->data.evt_proxy_filter_status.type,
-                         evt->data.evt_proxy_filter_status.count);
-     if (evt->data.evt_proxy_filter_status.count == 2) {
-       lcd_print("Proxy configured", SL_BTMESH_WSTK_LCD_ROW_FRIEND_CFG_VAL);
-     }
-     break;
+    case sl_btmesh_evt_proxy_filter_status_id:
+      app_log("Filter length = %d\r\n",
+              evt->data.evt_proxy_filter_status.count);
+      proxy_configuration(evt->data.evt_proxy_filter_status.type,
+                          evt->data.evt_proxy_filter_status.count);
+      if (evt->data.evt_proxy_filter_status.count == 2) {
+        lcd_print("Proxy configured", SL_BTMESH_WSTK_LCD_ROW_FRIEND_CFG_VAL);
+      }
+      break;
 
     default:
       break;
@@ -732,7 +727,8 @@ void sl_btmesh_factory_reset_on_node_reset(void)
  * @param[in] handle Handle of the sleeptimer instance
  * @param[in] data  Callback data
  ******************************************************************************/
-static void app_timer_callback(app_timer_t *handle, void *data){
+static void app_timer_callback(app_timer_t *handle, void *data)
+{
   (void)handle;
   (void)data;
 

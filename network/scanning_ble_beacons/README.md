@@ -38,7 +38,7 @@ This project README assumes that the reader is familiar with the usage of Silico
 
 ![terminal_log](images/terminal_log.png)
 
-### Implementation 
+### Implementation
 
 1. Handle the scan response event by adding following case to the `sl_bt_on_event()` function:
 ```C
@@ -47,7 +47,7 @@ case sl_bt_evt_scanner_legacy_advertisement_report_id:
   break;
 ```
 
-2. Add a function that handles the BLE scan responses, here's a sample:   
+2. Add a function that handles the BLE scan responses, here's a sample:
 ```C
 static void print_scan_resp(sl_bt_evt_scanner_legacy_advertisement_report_t *pResp)
 {

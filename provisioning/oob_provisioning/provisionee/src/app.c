@@ -353,7 +353,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
     case sl_btmesh_evt_node_static_oob_request_id:
       app_log("sl_btmesh_evt_node_static_oob_request_id\r\n");
       /* Responding to the authentication request */
-      static uint8array out_of_band_authentication_data = {16, {0x00,0x01,0x01,0x02,0x03,0x05,0x08,0x0D,0x00,0x01,0x01,0x02,0x03,0x05,0x08,0x0D}};
+      static uint8array out_of_band_authentication_data = { 16, { 0x00, 0x01, 0x01, 0x02, 0x03, 0x05, 0x08, 0x0D, 0x00, 0x01, 0x01, 0x02, 0x03, 0x05, 0x08, 0x0D } };
       sl_btmesh_node_send_static_oob_request_response(out_of_band_authentication_data.len,
                                                       out_of_band_authentication_data.data);
       break;
@@ -371,8 +371,8 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       break;
     default:
       app_log("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF));
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF));
       break;
   }
 }
@@ -386,7 +386,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
  ******************************************************************************/
 void app_button_press_cb(uint8_t button, uint8_t duration)
 {
-  if(provisioning_in_progress) {
+  if (provisioning_in_progress) {
     oob_counter++;
     return;
   }
@@ -484,7 +484,7 @@ static void app_oob_counter_timer_cb(app_timer_t *handle, void *data)
   (void)handle;
   app_log("Button presses: %d\n", oob_counter);
 
-  static uint8array out_of_band_authentication_input_hazard_data = {32, {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
+  static uint8array out_of_band_authentication_input_hazard_data = { 32, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
   out_of_band_authentication_input_hazard_data.data[31] = oob_counter;
   sc = sl_btmesh_node_send_input_oob_request_response(out_of_band_authentication_input_hazard_data.len,
                                                       out_of_band_authentication_input_hazard_data.data);

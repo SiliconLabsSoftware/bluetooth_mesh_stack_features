@@ -161,7 +161,7 @@ void sl_btmesh_change_hsl(void)
   // Adjust HSL
   hsl_index++;
 
-  sl_btmesh_set_hsl(hsl_index%HSL_INDEX_MAX);
+  sl_btmesh_set_hsl(hsl_index % HSL_INDEX_MAX);
 }
 
 /*******************************************************************************
@@ -173,20 +173,20 @@ void sl_btmesh_change_hsl(void)
  ******************************************************************************/
 void sl_btmesh_set_hsl(uint8_t new_hsl)
 {
-  char *color[HSL_INDEX_MAX]={"Off","Red","Green","Blue","Orange","Pink","Purple"};
+  char *color[HSL_INDEX_MAX] = { "Off", "Red", "Green", "Blue", "Orange", "Pink", "Purple" };
   //{hue(0-360 degree), saturation(0-100%),lightness(0-100%)}
   uint16_t hsl_table[HSL_INDEX_MAX][3] = {
-      {0,0,0},       //Off
-      {0,100,50},    //Red
-      {120,100,50},  //Green
-      {240,100,50},  //Blue
-      {39,100,50},   //Orange
-      {300,76,72},   //Pink
-      {248,53,58},   //Purple
+    { 0, 0, 0 },     //Off
+    { 0, 100, 50 },  //Red
+    { 120, 100, 50 }, //Green
+    { 240, 100, 50 }, //Blue
+    { 39, 100, 50 }, //Orange
+    { 300, 76, 72 }, //Pink
+    { 248, 53, 58 }, //Purple
   };
-  target_hue = (double)hsl_table[new_hsl][0]/360*65535;
-  target_saturation = (double)hsl_table[new_hsl][1]/100*65535;
-  target_lightness = (double)hsl_table[new_hsl][2]/100*65535;
+  target_hue = (double)hsl_table[new_hsl][0] / 360 * 65535;
+  target_saturation = (double)hsl_table[new_hsl][1] / 100 * 65535;
+  target_lightness = (double)hsl_table[new_hsl][2] / 100 * 65535;
 
   app_log("BT mesh HSL set light to  %s\r\n", color[new_hsl]);
   app_log("Hue:      %4ludeg\r\n", UINT16_TO_DEGREE(target_hue));

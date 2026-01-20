@@ -637,7 +637,7 @@ void handle_exclude(void)
         app_log_info("Excluding.." APP_LOG_NEW_LINE);
         sc = sl_btmesh_prov_set_key_refresh_exclusion(netkey_index,
                                                       1,
-                                                      command_uuid);                                         
+                                                      command_uuid);
         if (SL_STATUS_OK != sc) {
           app_log_status_f(sc, "Node exclusion failed" APP_LOG_NEW_LINE);
         } else {

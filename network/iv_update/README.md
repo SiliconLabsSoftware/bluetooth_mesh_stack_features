@@ -50,15 +50,15 @@ This project README assumes that the reader is familiar with the usage of Silico
     - Application > Utility > Button Press
     - Bluetooth Mesh > Models > Lighting > CTL Client
   - Install the "Bluetooth Mesh > Stack Classes > Test" component
-  
+
   ![bluetooth_mesh_test_component](images/bluetooth_mesh_test_component.png)
-  Without this component, the test fuctions would return ((sl_status_t)0x000F) SL_STATUS_NOT_SUPPORTED during the initialization
+  Without this component, the test functions would return ((sl_status_t)0x000F) SL_STATUS_NOT_SUPPORTED during the initialization
   ![bluetooth_mesh_test_missing](images/bluetooth_mesh_test_missing.png)
   ![bluetooth_mesh_test_installed](images/bluetooth_mesh_test_installed.png)
 
   - When everything is configured, build and flash the project
   - Flash the other board with the ```Bluetooth Mesh - SoC Light CTL``` demo or unchanged example
-  - If everything went right, you should see the boards booting up 
+  - If everything went right, you should see the boards booting up
   - If both of the WSTKs are running, provision them into the same network with SiliconLabs's own Bluetooth Mesh Application for Android/iOS.
   ![bluetooth_mesh_provision](images/bluetooth_mesh_provision.png)
   - After successful provisioning, assign them the roles of ```Light Lightness Client``` for the "Custom" and ```Light Lightness Server``` for the "Demo" board.

@@ -50,7 +50,7 @@ This project README assumes that the reader is familiar with the usage of Silico
 
   - When everything is configured, build and flash the project
   - Flash the other board with the ```Bluetooth Mesh - SoC Switch CTL``` example
-  - If everything went right, you should see the boards booting up 
+  - If everything went right, you should see the boards booting up
   - If both of the WSTKs are running, provision them into the same network with SiliconLabs's own Bluetooth Mesh Application for Android/iOS.
 
   ![bluetooth_mesh_provision](images/bluetooth_mesh_provision.jpg)

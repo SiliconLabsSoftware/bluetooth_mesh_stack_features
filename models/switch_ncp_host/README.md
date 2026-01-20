@@ -52,7 +52,7 @@ This project README assumes that the reader is familiar with compiling source co
 ![mesh_scan_list](images/mesh_scan_list.png)
 
   - After successful provisioning, create a Group for the two boards and assign them the roles of ```Light Lightness Client``` for the NCP and ```Light Lightness Server``` for the Standalone board.
-  - The NCP board is configured as a Low Power Node, so turn on the Friend functionality for the Standalone node (Friendship should be estabilished after this).
+  - The NCP board is configured as a Low Power Node, so turn on the Friend functionality for the Standalone node (Friendship should be established after this).
 
 ![ncp_provisioned](images/ncp_provisioned.png)
 

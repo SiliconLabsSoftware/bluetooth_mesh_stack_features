@@ -88,7 +88,7 @@
 #define BUTTON_PRESS_BUTTON_0                       0
 #define BUTTON_PRESS_BUTTON_1                       1
 
-static uint8_t temperature[TEMP_DATA_LENGTH] = {0, 0, 0, 0};
+static uint8_t temperature[TEMP_DATA_LENGTH] = { 0, 0, 0, 0 };
 static unit_t unit[UNIT_DATA_LENGTH] = {
   celsius
 };
@@ -116,7 +116,6 @@ static my_model_t my_model = {
   .opcodes_data[8] = update_interval_set_unack,
   .opcodes_data[9] = update_interval_status
 };
-
 
 /// Local provisioning
 #ifdef PROV_LOCALLY
@@ -166,9 +165,9 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
   switch (SL_BT_MSG_ID(evt->header)) {
     case sl_bt_evt_system_boot_id:
       // Factory reset the device if Button 0 or 1 is being pressed during reset
-      if((sl_simple_button_get_state(&sl_button_btn0) == SL_SIMPLE_BUTTON_PRESSED) || (sl_simple_button_get_state(&sl_button_btn1) == SL_SIMPLE_BUTTON_PRESSED)) {
-          factory_reset();
-          break;
+      if ((sl_simple_button_get_state(&sl_button_btn0) == SL_SIMPLE_BUTTON_PRESSED) || (sl_simple_button_get_state(&sl_button_btn1) == SL_SIMPLE_BUTTON_PRESSED)) {
+        factory_reset();
+        break;
       }
       // Initialize Mesh stack in Node operation mode,
       // wait for initialized event
@@ -187,19 +186,19 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
     case sl_bt_evt_system_external_signal_id: {
       uint8_t opcode = 0, length = 0, *data = NULL;
       // check if external signal triggered by button 0 press
-      if(evt->data.evt_system_external_signal.extsignals & EX_B0_PRESS) {
-          read_temperature();
-          opcode = temperature_status;
-          length = TEMP_DATA_LENGTH;
-          data = temperature;
-          app_log("B0 Pressed.\r\n");
+      if (evt->data.evt_system_external_signal.extsignals & EX_B0_PRESS) {
+        read_temperature();
+        opcode = temperature_status;
+        length = TEMP_DATA_LENGTH;
+        data = temperature;
+        app_log("B0 Pressed.\r\n");
       }
       // check if external signal triggered by button 1 press
-      if(evt->data.evt_system_external_signal.extsignals & EX_B1_PRESS) {
-          opcode = unit_status;
-          length = UNIT_DATA_LENGTH;
-          data = unit;
-          app_log("B1 Pressed.\r\n");
+      if (evt->data.evt_system_external_signal.extsignals & EX_B1_PRESS) {
+        opcode = unit_status;
+        length = UNIT_DATA_LENGTH;
+        data = unit;
+        app_log("B1 Pressed.\r\n");
       }
       // set the vendor model publication message
       sc = sl_btmesh_vendor_model_set_publication(my_model.elem_index,
@@ -207,19 +206,19 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
                                                   my_model.model_id,
                                                   opcode,
                                                   1, length, data);
-      if(sc != SL_STATUS_OK) {
-          app_log("Set publication error: 0x%04lX\r\n", sc);
+      if (sc != SL_STATUS_OK) {
+        app_log("Set publication error: 0x%04lX\r\n", sc);
       } else {
-          app_log("Set publication done. Publishing...\r\n");
-          // publish the vendor model publication message
-          sc = sl_btmesh_vendor_model_publish(my_model.elem_index,
-                                              my_model.vendor_id,
-                                              my_model.model_id);
-          if(sc != SL_STATUS_OK) {
-              app_log("Publish error: 0x%04lX\r\n", sc);
-          } else {
-              app_log("Publish done.\r\n");
-          }
+        app_log("Set publication done. Publishing...\r\n");
+        // publish the vendor model publication message
+        sc = sl_btmesh_vendor_model_publish(my_model.elem_index,
+                                            my_model.vendor_id,
+                                            my_model.model_id);
+        if (sc != SL_STATUS_OK) {
+          app_log("Publish error: 0x%04lX\r\n", sc);
+        } else {
+          app_log("Publish done.\r\n");
+        }
       }
       break;
     }
@@ -251,7 +250,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                        my_model.opcodes_data);
       app_assert_status_f(sc, "Failed to initialize vendor model\r\n");
 
-      if(evt->data.evt_node_initialized.provisioned) {
+      if (evt->data.evt_node_initialized.provisioned) {
         app_log("Node already provisioned.\r\n");
       } else {
         app_log("Node unprovisioned\r\n");
@@ -402,11 +401,10 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
               rx_evt->nonrelayed,
               rx_evt->opcode,
               rx_evt->final);
-      for(int i = 0; i < evt->data.evt_vendor_model_receive.payload.len; i++) {
-          app_log("%x ", evt->data.evt_vendor_model_receive.payload.data[i]);
+      for (int i = 0; i < evt->data.evt_vendor_model_receive.payload.len; i++) {
+        app_log("%x ", evt->data.evt_vendor_model_receive.payload.data[i]);
       }
       app_log("\r\n");
-
 
       switch (rx_evt->opcode) {
         // Server
@@ -487,48 +485,48 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
           break;
       }
 
-      if(action_req & ACK_REQ) {
-          sc = sl_btmesh_vendor_model_send(rx_evt->source_address,
-                                           rx_evt->va_index,
-                                           rx_evt->appkey_index,
-                                           my_model.elem_index,
-                                           my_model.vendor_id,
-                                           my_model.model_id,
-                                           rx_evt->nonrelayed,
-                                           opcode,
-                                           1,
-                                           payload_len,
-                                           payload_data);
-          // Errors that are returned from this function are usually due to low
-          // memory. Low memory is non-critical and we can try sending again later.
-          if(sc != SL_STATUS_OK) {
-              app_log("Vendor model send error: 0x%04lX\r\n", sc);
-          } else {
-              app_log("Acknowledge sent.\r\n");
-          }
+      if (action_req & ACK_REQ) {
+        sc = sl_btmesh_vendor_model_send(rx_evt->source_address,
+                                         rx_evt->va_index,
+                                         rx_evt->appkey_index,
+                                         my_model.elem_index,
+                                         my_model.vendor_id,
+                                         my_model.model_id,
+                                         rx_evt->nonrelayed,
+                                         opcode,
+                                         1,
+                                         payload_len,
+                                         payload_data);
+        // Errors that are returned from this function are usually due to low
+        // memory. Low memory is non-critical and we can try sending again later.
+        if (sc != SL_STATUS_OK) {
+          app_log("Vendor model send error: 0x%04lX\r\n", sc);
+        } else {
+          app_log("Acknowledge sent.\r\n");
+        }
       }
-      if(action_req & STATUS_UPDATE_REQ) {
-          app_log("Publishing status update.\r\n");
-          sc = sl_btmesh_vendor_model_set_publication(my_model.elem_index,
-                                                      my_model.vendor_id,
-                                                      my_model.model_id,
-                                                      opcode,
-                                                      1,
-                                                      payload_len,
-                                                      payload_data);
-          if(sc != SL_STATUS_OK) {
-              app_log("Set publication error: 0x%04lX\r\n", sc);
+      if (action_req & STATUS_UPDATE_REQ) {
+        app_log("Publishing status update.\r\n");
+        sc = sl_btmesh_vendor_model_set_publication(my_model.elem_index,
+                                                    my_model.vendor_id,
+                                                    my_model.model_id,
+                                                    opcode,
+                                                    1,
+                                                    payload_len,
+                                                    payload_data);
+        if (sc != SL_STATUS_OK) {
+          app_log("Set publication error: 0x%04lX\r\n", sc);
+        } else {
+          app_log("Set publication done. Publishing ...\r\n");
+          sc = sl_btmesh_vendor_model_publish(my_model.elem_index,
+                                              my_model.vendor_id,
+                                              my_model.model_id);
+          if (sc != SL_STATUS_OK) {
+            app_log("Publish error: 0x%04lX\r\n", sc);
           } else {
-              app_log("Set publication done. Publishing ...\r\n");
-              sc = sl_btmesh_vendor_model_publish(my_model.elem_index,
-                                                  my_model.vendor_id,
-                                                  my_model.model_id);
-              if(sc != SL_STATUS_OK) {
-                  app_log("Publish error: 0x%04lX\r\n", sc);
-              } else {
-                  app_log("Publish done.\r\n");
-              }
+            app_log("Publish done.\r\n");
           }
+        }
       }
       break;
     }
@@ -545,11 +543,11 @@ void app_button_press_cb(uint8_t button, uint8_t duration)
   // Selecting action by duration
   switch (duration) {
     case APP_BUTTON_PRESS_DURATION_SHORT:
-      // Handling of button press less than 0.25s
+    // Handling of button press less than 0.25s
     case APP_BUTTON_PRESS_DURATION_MEDIUM:
-      // Handling of button press greater than 0.25s and less than 1s
+    // Handling of button press greater than 0.25s and less than 1s
     case APP_BUTTON_PRESS_DURATION_LONG:
-      // Handling of button press greater than 1s and less than 5s
+    // Handling of button press greater than 1s and less than 5s
     case APP_BUTTON_PRESS_DURATION_VERYLONG:
       if (button == BUTTON_PRESS_BUTTON_0) {
         sl_bt_external_signal(EX_B0_PRESS);
@@ -567,7 +565,7 @@ static void read_temperature(void)
 {
   uint32_t rel_hum;
   float temp;
-  if(sl_sensor_rht_get(&rel_hum, (int32_t *)temperature) != SL_STATUS_OK) {
+  if (sl_sensor_rht_get(&rel_hum, (int32_t *)temperature) != SL_STATUS_OK) {
     app_log("Error while reading temperature sensor. Clear the buffer.\r\n");
     memset(temperature, 0, sizeof(temperature));
   }
@@ -580,7 +578,6 @@ static void read_temperature(void)
     *(int32_t *) temperature = (int32_t) (temp * 1000);
   }
 }
-
 
 /// Reset
 static void factory_reset(void)
@@ -600,15 +597,14 @@ static void app_reset_timer_cb(app_timer_t *handle, void *data)
 static app_timer_t app_reset_timer;
 static void delay_reset_ms(uint32_t ms)
 {
-  if(ms < 10) {
-      ms = 10;
+  if (ms < 10) {
+    ms = 10;
   }
   app_timer_start(&app_reset_timer,
                   ms,
                   app_reset_timer_cb,
                   NULL,
                   false);
-
 }
 
 /// Update Interval
@@ -627,7 +623,7 @@ static void periodic_update_timer_cb(app_timer_t *handle, void *data)
                                               1,
                                               TEMP_DATA_LENGTH,
                                               temperature);
-  if(sc != SL_STATUS_OK) {
+  if (sc != SL_STATUS_OK) {
     app_log("Set publication error: 0x%04lX\r\n", sc);
   } else {
     app_log("Set publication done. Publishing...\r\n");

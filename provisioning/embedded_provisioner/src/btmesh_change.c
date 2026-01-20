@@ -89,7 +89,6 @@ void sl_btmesh_change_lightness(int8_t change_percentage)
   sl_btmesh_ctl_client_set_lightness(lightness_percent);
 }
 
-
 /*******************************************************************************
  * This function change the color temperature and sends it to the server.
  *

@@ -35,10 +35,9 @@
 **                             Typedef and macros
 ***************************************************************************** */
 typedef enum {
-	eMESH_NVM_OK=0,
-	eMESH_NVM_ERASE_ERROR,
-	eMESH_NVM_MEMORY_ERROR
-
+  eMESH_NVM_OK = 0,
+  eMESH_NVM_ERASE_ERROR,
+  eMESH_NVM_MEMORY_ERROR
 } eMesh_NVM_status;
 
 /******************************************************************************

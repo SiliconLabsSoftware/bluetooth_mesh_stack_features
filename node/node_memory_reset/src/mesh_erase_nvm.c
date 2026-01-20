@@ -73,17 +73,15 @@ eMesh_NVM_status mesh_erase_nvm_settings(void)
   status = eMESH_NVM_OK;
 
   printf("Erasing keys in range 0x1000-0x2FFF...\r\n");
-  for(key = NVM_MESH_KEY_START; key < NVM_MESH_KEY_END; key++)
-  {
+  for (key = NVM_MESH_KEY_START; key < NVM_MESH_KEY_END; key++) {
     result = sl_bt_nvm_erase(key);
-	  if(result !=  SL_STATUS_OK)
-	  {
-		  /* Erase error */
-  		status = eMESH_NVM_ERASE_ERROR;
-		  //printf("Error erasing key %x - result %lx.\r\n", key, result);
-	  } else {
-	    printf("Success erasing key %x - result %lx.\r\n", key, result);
-	  }
+    if (result !=  SL_STATUS_OK) {
+      /* Erase error */
+      status = eMESH_NVM_ERASE_ERROR;
+      //printf("Error erasing key %x - result %lx.\r\n", key, result);
+    } else {
+      printf("Success erasing key %x - result %lx.\r\n", key, result);
+    }
   }
   printf("Done.\r\n");
 
