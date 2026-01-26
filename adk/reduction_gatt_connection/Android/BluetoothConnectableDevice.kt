@@ -365,7 +365,7 @@ class BluetoothConnectableDevice(
             result = refreshMethod.invoke(bluetoothGatt, *arrayOfNulls(0)) as? Boolean ?: false
             Log.d(TAG, "refreshDeviceCache $result")
         } catch (localException: Exception) {
-            Log.e(TAG, "An exception occured while refreshing device")
+            Log.e(TAG, "An exception occurred while refreshing device")
         }
         return result
     }

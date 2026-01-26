@@ -4,7 +4,7 @@
 
 Provisioner - A node that is capable of adding a device to a mesh network.
 
-Provisioning is the process of adding a new, unprovisioned device to a Bluetooth mesh network, such as a light bulb. The process is managed by a provisioner. A provisioner and an unprovisioned device follow a fixed procedure which is defined in the Bluetooth mesh specification. A provisioner provides the unprovisioned device with provisioning data that allows it to become a Bluetooh mesh node.
+Provisioning is the process of adding a new, unprovisioned device to a Bluetooth mesh network, such as a light bulb. The process is managed by a provisioner. A provisioner and an unprovisioned device follow a fixed procedure which is defined in the Bluetooth mesh specification. A provisioner provides the unprovisioned device with provisioning data that allows it to become a Bluetooth mesh node.
 
 The out of band (OOB) association model is designed for scenarios where an out of band mechanism is used to both discover the devices as well as to exchange or transfer cryptographic information which would be used in the pairing process. Out of band is a flexible option for developers that allows you to define some of your own pairing mechanisms, so the security level depends on out of band protection capability.
 
@@ -31,7 +31,7 @@ This project README assumes that the reader is familiar with the usage of Silico
 
 ## Known limitations:
 
-  - The provisioning data is stored in the EFR32 internal flash and has limited capacity, the maximum number of nodes this example can support is around 10-15 
+  - The provisioning data is stored in the EFR32 internal flash and has limited capacity, the maximum number of nodes this example can support is around 10-15
   - Output, Static and NoOOB not demonstrated separately, due to they being nearly identical
   - Public key sharing is not demonstrated
 
@@ -61,7 +61,7 @@ This project README assumes that the reader is familiar with the usage of Silico
   ![oob_authvalue](images/oob_authvalue.png)
   ![oob_input](images/oob_input.png)
 
-  - If the provisioning is successful, the Provisioner will extract the DCD informations from the new Node.
+  - If the provisioning is successful, the Provisioner will extract the DCD information from the new Node.
 
   ![dcd_infos](images/dcd_infos.png)
 

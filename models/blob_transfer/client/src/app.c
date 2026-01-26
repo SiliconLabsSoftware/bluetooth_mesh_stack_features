@@ -72,9 +72,9 @@ static uint8_t advertising_set_handle = 0xff;
 
 #define SERVER_LIMIT                4
 
-#define NETWORK_KEY                 {0x23, 0x98, 0xdf, 0xa5, 0x09, 0x3e, 0x74, 0xbb, 0xc2, 0x45, 0x1f, 0xae, 0xea, 0xd7, 0x67, 0xcd}
-#define APPLICATION_KEY             {0x16, 0x39, 0x38, 0x03, 0x9b, 0x8d, 0x8a, 0x20, 0x81, 0x60, 0xa7, 0x93, 0x33, 0x3d, 0x03, 0x61}
-#define DEVICE_KEY                  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+#define NETWORK_KEY                 { 0x23, 0x98, 0xdf, 0xa5, 0x09, 0x3e, 0x74, 0xbb, 0xc2, 0x45, 0x1f, 0xae, 0xea, 0xd7, 0x67, 0xcd }
+#define APPLICATION_KEY             { 0x16, 0x39, 0x38, 0x03, 0x9b, 0x8d, 0x8a, 0x20, 0x81, 0x60, 0xa7, 0x93, 0x33, 0x3d, 0x03, 0x61 }
+#define DEVICE_KEY                  { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
 
 #define UADDR_ELEM_BITS             4
 #define UADDR_RSVD_BITS             1
@@ -88,12 +88,12 @@ static const uint8_t network_id = 0x0;
 static const uint8_t vendor_model_elem_index = 0x0;
 static const uint8_t blob_client_elem_index = 0x1;
 
-static const uint8_t blob_id_client_opcodes[] = {0x0};
-static const uint8_t server_address_opcodes[] = {0x1};
+static const uint8_t blob_id_client_opcodes[] = { 0x0 };
+static const uint8_t server_address_opcodes[] = { 0x1 };
 
 uint16_t blob_id_handle;
-sl_bt_uuid_64_t blob_id = {{0}};
-uuid_128 virtual_address = {{0}};
+sl_bt_uuid_64_t blob_id = { { 0 } };
+uuid_128 virtual_address = { { 0 } };
 
 uint8_t servers[SERVER_LIMIT * 2];
 uint8_t servers_length = 0;
@@ -198,7 +198,7 @@ static void set_device_name(bd_addr *addr)
 bool handle_reset_conditions(void)
 {
   // If PB0 is held down then do full factory reset
-  if(sl_simple_button_get_state(&sl_button_btn0) == SL_SIMPLE_BUTTON_PRESSED) {
+  if (sl_simple_button_get_state(&sl_button_btn0) == SL_SIMPLE_BUTTON_PRESSED) {
     // Full factory reset
     sl_btmesh_initiate_full_reset();
     return false;
@@ -206,7 +206,7 @@ bool handle_reset_conditions(void)
 
 #ifndef SINGLE_BUTTON
   // If PB1 is held down then do node factory reset
-  if(sl_simple_button_get_state(&sl_button_btn1) == SL_SIMPLE_BUTTON_PRESSED) {
+  if (sl_simple_button_get_state(&sl_button_btn1) == SL_SIMPLE_BUTTON_PRESSED) {
     // Node factory reset
     sl_btmesh_initiate_node_reset();
     return false;
@@ -245,9 +245,9 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
     case sl_bt_evt_system_boot_id:
       handle_boot_event();
 
-      aes_key_128 netkey = {NETWORK_KEY};
-      aes_key_128 appkey = {APPLICATION_KEY};
-      aes_key_128 devkey = {DEVICE_KEY};
+      aes_key_128 netkey = { NETWORK_KEY };
+      aes_key_128 appkey = { APPLICATION_KEY };
+      aes_key_128 devkey = { DEVICE_KEY };
       sl_status_t sc;
       uint32_t count;
       bd_addr btaddr;
@@ -263,23 +263,23 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
       sc = sl_bt_system_get_identity_address(&btaddr, &type);
       app_assert_status_f(sc, "sl_bt_system_get_identity_address failed");
 
-      uint16_t addr = *(uint16_t *)&btaddr.addr[0] ^
-                     *(uint16_t *)&btaddr.addr[2] ^
-                     *(uint16_t *)&btaddr.addr[4];
-      addr &= (0xFFFF<<UADDR_ELEM_BITS);
-      addr &= (0xFFFF>>(UADDR_RSVD_BITS+1));
+      uint16_t addr = *(uint16_t *)&btaddr.addr[0]
+                      ^ *(uint16_t *)&btaddr.addr[2]
+                      ^ *(uint16_t *)&btaddr.addr[4];
+      addr &= (0xFFFF << UADDR_ELEM_BITS);
+      addr &= (0xFFFF >> (UADDR_RSVD_BITS + 1));
 
       if (count == 0) {
-          // Set provisioning data
-          sc = sl_btmesh_node_set_provisioning_data(devkey,
-                                                    netkey,
-                                                    network_id,
-                                                    0,
-                                                    addr,
-                                                    0);
-          app_assert_status_f(sc, "sl_btmesh_node_set_provisioning_data failed");
+        // Set provisioning data
+        sc = sl_btmesh_node_set_provisioning_data(devkey,
+                                                  netkey,
+                                                  network_id,
+                                                  0,
+                                                  addr,
+                                                  0);
+        app_assert_status_f(sc, "sl_btmesh_node_set_provisioning_data failed");
 
-          app_log("Node self provisioned, address = %04x\r\n", addr);
+        app_log("Node self provisioned, address = %04x\r\n", addr);
       }
 
       // Application key
@@ -288,16 +288,15 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
       app_assert_status_f(sc, "sl_btmesh_node_get_key_count failed");
 
       if (count == 0) {
-          // Add application key
-          sc = sl_btmesh_test_add_local_key(1,
-                                            appkey,
-                                            appkey_index,
-                                            network_id);
-          app_assert_status_f(sc, "sl_btmesh_test_add_local_key failed");
+        // Add application key
+        sc = sl_btmesh_test_add_local_key(1,
+                                          appkey,
+                                          appkey_index,
+                                          network_id);
+        app_assert_status_f(sc, "sl_btmesh_test_add_local_key failed");
 
-
-          app_log("Node self configured, resetting\r\n");
-          sl_bt_system_reboot();
+        app_log("Node self configured, resetting\r\n");
+        sl_bt_system_reboot();
       }
 
       sc = sl_bt_advertiser_create_set(&advertising_set_handle);
@@ -335,46 +334,46 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
       app_assert_status_f(sc, "sl_bt_advertiser_start failed");
       break;
     case sl_bt_evt_gatt_server_user_write_request_id:
-      if(evt->data.evt_gatt_server_user_write_request.characteristic == gattdb_image_characteristic) {
-          if(evt->data.evt_gatt_server_user_write_request.value.len == 1) {
-             switch(evt->data.evt_gatt_server_user_write_request.value.data[0]) {
-               case NEW_IMAGE:
-                 GLIB_clear(&glibContext);
-                 row = 0;
-                 column = 0;
-                 data_id = 0;
-               break;
-               case PROPAGATE_IMAGE:
-                 send_blob_id();
-               break;
-             }
-          } else {
-
-              for(uint8_t byte = 0; byte < evt->data.evt_gatt_server_user_write_request.value.len; byte++) {
-
-                  data[data_id] = evt->data.evt_gatt_server_user_write_request.value.data[byte];
-
-                  for(uint8_t bit = 0; bit < 8; bit++) {
-                    if(!(data[data_id] & (1 << bit))) GLIB_drawPixel(&glibContext, column, row);
-                    column++;
-                  }
-
-                  data_id++;
-
-                  if(column == 128) {
-                    column = 0;
-                    row++;
-                  }
-                  if(row == 128) {
-                    DMD_updateDisplay();
-                  }
-              }
+      if (evt->data.evt_gatt_server_user_write_request.characteristic == gattdb_image_characteristic) {
+        if (evt->data.evt_gatt_server_user_write_request.value.len == 1) {
+          switch (evt->data.evt_gatt_server_user_write_request.value.data[0]) {
+            case NEW_IMAGE:
+              GLIB_clear(&glibContext);
+              row = 0;
+              column = 0;
+              data_id = 0;
+              break;
+            case PROPAGATE_IMAGE:
+              send_blob_id();
+              break;
           }
+        } else {
+          for (uint8_t byte = 0; byte < evt->data.evt_gatt_server_user_write_request.value.len; byte++) {
+            data[data_id] = evt->data.evt_gatt_server_user_write_request.value.data[byte];
 
-          sc = sl_bt_gatt_server_send_user_write_response(evt->data.evt_gatt_server_user_write_request.connection,
-                                                          evt->data.evt_gatt_server_user_write_request.characteristic,
-                                                          SL_STATUS_OK);
-          app_assert_status_f(sc, "sl_bt_gatt_server_send_user_write_response failed");
+            for (uint8_t bit = 0; bit < 8; bit++) {
+              if (!(data[data_id] & (1 << bit))) {
+                GLIB_drawPixel(&glibContext, column, row);
+              }
+              column++;
+            }
+
+            data_id++;
+
+            if (column == 128) {
+              column = 0;
+              row++;
+            }
+            if (row == 128) {
+              DMD_updateDisplay();
+            }
+          }
+        }
+
+        sc = sl_bt_gatt_server_send_user_write_response(evt->data.evt_gatt_server_user_write_request.connection,
+                                                        evt->data.evt_gatt_server_user_write_request.characteristic,
+                                                        SL_STATUS_OK);
+        app_assert_status_f(sc, "sl_bt_gatt_server_send_user_write_response failed");
       }
       break;
     case sl_bt_evt_scanner_legacy_advertisement_report_id:
@@ -385,8 +384,8 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
     // Default event handler.
     default:
       app_log("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF));
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF));
       break;
   }
 }
@@ -409,7 +408,9 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                        1,
                                        1,
                                        blob_id_client_opcodes);
-      if(sc != SL_STATUS_OK) app_log("sl_btmesh_vendor_model_init: failed 0x%.2lx\r\n", sc);
+      if (sc != SL_STATUS_OK) {
+        app_log("sl_btmesh_vendor_model_init: failed 0x%.2lx\r\n", sc);
+      }
 
       // Vendor Model Init for the Server Address
       sc = sl_btmesh_vendor_model_init(vendor_model_elem_index,
@@ -418,14 +419,18 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                        0,
                                        1,
                                        server_address_opcodes);
-      if(sc != SL_STATUS_OK) app_log("sl_btmesh_vendor_model_init: failed 0x%.2lx\r\n", sc);
+      if (sc != SL_STATUS_OK) {
+        app_log("sl_btmesh_vendor_model_init: failed 0x%.2lx\r\n", sc);
+      }
 
       // Bind Vendor Model to Appkey
       sc = sl_btmesh_test_bind_local_model_app(vendor_model_elem_index,
                                                appkey_index,
                                                0x1000,
                                                0x2001);
-      if(sc != SL_STATUS_OK) app_log("sl_btmesh_test_bind_local_model_app: failed 0x%.2lx\r\n", sc);
+      if (sc != SL_STATUS_OK) {
+        app_log("sl_btmesh_test_bind_local_model_app: failed 0x%.2lx\r\n", sc);
+      }
 
       // Publish configuration
       sc = sl_btmesh_test_set_local_model_pub(vendor_model_elem_index,
@@ -437,14 +442,18 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                               0,
                                               0,
                                               0);
-      if(sc != SL_STATUS_OK) app_log("sl_btmesh_test_set_local_model_pub: failed 0x%.2lx\r\n", sc);
+      if (sc != SL_STATUS_OK) {
+        app_log("sl_btmesh_test_set_local_model_pub: failed 0x%.2lx\r\n", sc);
+      }
 
       // Bind the BLOB Model to Appkey
       sc = sl_btmesh_test_bind_local_model_app(blob_client_elem_index,
                                                appkey_index,
                                                0xFFFF,
                                                0x1401);
-      if(sc != SL_STATUS_OK) app_log("sl_btmesh_test_bind_local_model_app: failed 0x%.2lx\r\n", sc);
+      if (sc != SL_STATUS_OK) {
+        app_log("sl_btmesh_test_bind_local_model_app: failed 0x%.2lx\r\n", sc);
+      }
 
       // Publish configuration
       sc = sl_btmesh_test_set_local_model_pub(blob_client_elem_index,
@@ -456,21 +465,27 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                               0,
                                               0,
                                               0);
-      if(sc != SL_STATUS_OK) app_log("sl_btmesh_test_set_local_model_pub: failed 0x%.2lx\r\n", sc);
+      if (sc != SL_STATUS_OK) {
+        app_log("sl_btmesh_test_set_local_model_pub: failed 0x%.2lx\r\n", sc);
+      }
 
       // Bind Vendor Model to Appkey
       sc = sl_btmesh_test_bind_local_model_app(vendor_model_elem_index,
                                                appkey_index,
                                                0x1000,
                                                0x2003);
-      if(sc != SL_STATUS_OK) app_log("sl_btmesh_test_bind_local_model_app: failed 0x%.2lx\r\n", sc);
+      if (sc != SL_STATUS_OK) {
+        app_log("sl_btmesh_test_bind_local_model_app: failed 0x%.2lx\r\n", sc);
+      }
 
       // Subscribing configuration
       sc = sl_btmesh_test_add_local_model_sub(vendor_model_elem_index,
                                               0x1000,
                                               0x2003,
                                               GRP_ADDR_SERVER_ADDR);
-      if(sc != SL_STATUS_OK) app_log("sl_btmesh_test_add_local_model_sub: failed 0x%.2lx\r\n", sc);
+      if (sc != SL_STATUS_OK) {
+        app_log("sl_btmesh_test_add_local_model_sub: failed 0x%.2lx\r\n", sc);
+      }
       break;
     ///////////////////////////////////////////////////////////////////////////
     // Add additional event handlers here as your application requires!      //
@@ -478,17 +493,17 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
 
     case sl_btmesh_evt_vendor_model_send_complete_id:
       uint16_t result = evt->data.evt_vendor_model_send_complete.result;
-      if(result == SL_STATUS_OK && blob_id_handle == evt->data.evt_vendor_model_send_complete.handle) {
+      if (result == SL_STATUS_OK && blob_id_handle == evt->data.evt_vendor_model_send_complete.handle) {
         send_image();
       }
       break;
     case sl_btmesh_evt_vendor_model_receive_id:
-      if(evt->data.evt_vendor_model_receive.vendor_id == 0x1000 &&
-         evt->data.evt_vendor_model_receive.model_id == 0x2003) {
-          servers[servers_length] = evt->data.evt_vendor_model_receive.payload.data[0];
-          servers_length++;
-          servers[servers_length] = evt->data.evt_vendor_model_receive.payload.data[1];
-          servers_length++;
+      if (evt->data.evt_vendor_model_receive.vendor_id == 0x1000
+          && evt->data.evt_vendor_model_receive.model_id == 0x2003) {
+        servers[servers_length] = evt->data.evt_vendor_model_receive.payload.data[0];
+        servers_length++;
+        servers[servers_length] = evt->data.evt_vendor_model_receive.payload.data[1];
+        servers_length++;
       }
       break;
     // -------------------------------
@@ -498,12 +513,13 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
   }
 }
 
-static void handle_blob_transfer_client_notification(const sl_btmesh_blob_transfer_client_notification_t *const notification) {
+static void handle_blob_transfer_client_notification(const sl_btmesh_blob_transfer_client_notification_t *const notification)
+{
   app_log("Progress %ld\r\n", notification->params.progress.confirmed_tx_bytes);
 }
 
-void send_image() {
-
+void send_image()
+{
   sl_status_t sc;
 
   sc = sl_btmesh_blob_transfer_client_setup(blob_client_elem_index,
@@ -530,8 +546,8 @@ void send_image() {
   app_assert_status_f(sc, "sl_btmesh_blob_transfer_client_start failed");
 }
 
-void send_blob_id() {
-
+void send_blob_id()
+{
   sl_status_t sc;
 
   blob_id.data[0] = blob_id.data[0] + 1;

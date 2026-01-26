@@ -4,7 +4,7 @@
 
 Provisioner - A node that is capable of adding a device to a mesh network.
 
-Provisioning is the process of adding a new, unprovisioned device to a Bluetooth mesh network, such as a light bulb. The process is managed by a provisioner. A provisioner and an unprovisioned device follow a fixed procedure which is defined in the Bluetooth mesh specification. A provisioner provides the unprovisioned device with provisioning data that allows it to become a Bluetooh mesh node.
+Provisioning is the process of adding a new, unprovisioned device to a Bluetooth mesh network, such as a light bulb. The process is managed by a provisioner. A provisioner and an unprovisioned device follow a fixed procedure which is defined in the Bluetooth mesh specification. A provisioner provides the unprovisioned device with provisioning data that allows it to become a Bluetooth mesh node.
 
 This example demonstrates the Remote Provisioning feature of the Silicon Labs Mesh SDK. With it, a device can be provisioned without a direct radio connection between the provisioner and the unprovisioned node. The feature uses standard Mesh networking between the provisioner and a Remote Provisioning Server, so that the server can provision any device in the radio range of the network. The PB-Remote bearer allows a Provisioner that is outside immediate radio range of an unprovisioned device to communicate with a node supporting the Remote Provisioning Server model that is within immediate radio range of the unprovisioned device, and to use that node as a re-transmitter to communicate with the unprovisioned device using PB-ADV or PB-GATT.
 
@@ -55,7 +55,7 @@ The way how this example is structured is aimed to demonstrate and ease the unde
   ![enable_virtual_com](images/enable_virtual_com.png)
 
   - Add the Configuration Client Model in the Bluetooth Mesh Configurator to the Main Element (skipping this would result in SL_STATUS_BT_MESH_DOES_NOT_EXIST ((sl_status_t)0x0502))
- 
+
   ![add_config_client_model](images/add_config_client_model.png)
 
   - Increase the field values meant to store the data for Provisioned Devices (0 by default) at Bluetooth Mesh > Bluetooth Mesh Stack as per your needs

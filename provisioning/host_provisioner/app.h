@@ -146,14 +146,14 @@ void btmesh_app_on_node_configuration_end(void);
 /**************************************************************************//**
  * Callback to copy options array
  *
- * @param[out] long_options Destination addres for options array
+ * @param[out] long_options Destination address for options array
  *******************************************************************************/
 void btmesh_app_on_build_cmd_options(struct option *long_options);
 
 /**************************************************************************//**
  * Callback to copy options array for CBP
  *
- * @param[out] long_options Destination addres for options array
+ * @param[out] long_options Destination address for options array
  *******************************************************************************/
 void btmesh_cbp_on_build_cmd_options(struct option *long_options);
 

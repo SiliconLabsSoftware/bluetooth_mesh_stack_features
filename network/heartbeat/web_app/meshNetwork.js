@@ -1,4 +1,4 @@
-   
+
 let nodes = null;
 let edges = null;
 let provisionerDevice = null;
@@ -217,7 +217,7 @@ function _remapNetwork() {
             console.log(error);
         });
     }
-    
+
 }
 
 function _onProvisionerDisconnected() {
@@ -277,7 +277,7 @@ function _connectProvisioner() {
                     default: console.log('Unknown Characteristic - ' + characteristic.uuid);
                 }
             });
-            
+
 
         })
         .catch(error => {

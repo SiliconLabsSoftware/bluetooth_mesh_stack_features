@@ -4,7 +4,7 @@
 
 Provisioner - A node that is capable of adding a device to a mesh network.
 
-Provisioning is the process of adding a new, unprovisioned device to a Bluetooth mesh network, such as a light bulb. The process is managed by a provisioner. A provisioner and an unprovisioned device follow a fixed procedure which is defined in the Bluetooth mesh specification. A provisioner provides the unprovisioned device with provisioning data that allows it to become a Bluetooh mesh node.
+Provisioning is the process of adding a new, unprovisioned device to a Bluetooth mesh network, such as a light bulb. The process is managed by a provisioner. A provisioner and an unprovisioned device follow a fixed procedure which is defined in the Bluetooth mesh specification. A provisioner provides the unprovisioned device with provisioning data that allows it to become a Bluetooth mesh node.
 
 This example is aimed to demonstrate our Mesh library's capabilities in building a host provisioner solution with a RaspberryPi as an NCP host and a WSTK board as an NCP target.
 

@@ -102,7 +102,7 @@ Below is a pseudo code to demonstrate to exclude 3 nodes with UUID - uuid1, uuid
           break;
        }
     }
-    
+
     ...
 ```
 

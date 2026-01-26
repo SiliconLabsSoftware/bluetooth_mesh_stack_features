@@ -77,8 +77,8 @@ extern "C" {
   "Can be acquired by --scan.\n"                                                 \
   "    -r --remove      Remove the given node from the Mesh network\n"           \
   "                     <UUID>     The UUID of the node to be removed\n"         \
-  "    -v --exclude     Exclude the given node from the Mesh network\n"         \
-  "                    <UUID>     The UUID of the node to be excluded\n"        \
+  "    -v --exclude     Exclude the given node from the Mesh network\n"          \
+  "                    <UUID>     The UUID of the node to be excluded\n"         \
   "    -k --key-refresh Refresh the network key and app key\n"                   \
   "                     <timeout>  Phase timeout in seconds\n"                   \
   "    -x --key-export  Export the network, app, and device keys in JSON\n"      \

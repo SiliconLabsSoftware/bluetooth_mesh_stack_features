@@ -85,7 +85,7 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
       // wait for initialized event
       sc = sl_btmesh_node_init();
       // Needed because of self-initializing component
-      if(sc !=  SL_STATUS_INVALID_STATE) {
+      if (sc !=  SL_STATUS_INVALID_STATE) {
         app_assert_status_f(sc, "Failed to init node");
       }
 
@@ -95,13 +95,13 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
       app_assert_status_f(sc, "sl_bt_system_get_identity_address failed");
 
       app_log("Bluetooth %s address: %02X:%02X:%02X:%02X:%02X:%02X\n",
-                 address_type ? "static random" : "public device",
-                 address.addr[5],
-                 address.addr[4],
-                 address.addr[3],
-                 address.addr[2],
-                 address.addr[1],
-                 address.addr[0]);
+              address_type ? "static random" : "public device",
+              address.addr[5],
+              address.addr[4],
+              address.addr[3],
+              address.addr[2],
+              address.addr[1],
+              address.addr[0]);
       break;
     case sl_bt_evt_scanner_legacy_advertisement_report_id:
       /*app_log("Bluetooth %s address: %02X:%02X:%02X:%02X:%02X:%02X\n",
@@ -118,8 +118,8 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
       break;
     default:
       app_log("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
       break;
   }
 }
@@ -140,7 +140,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
         // start unprovisioned Beaconing using PB-ADV and PB-GATT Bearers
         sc = sl_btmesh_node_start_unprov_beaconing(PB_ADV | PB_GATT);
         // Needed because of self-initializing component
-        if(sc !=  SL_STATUS_INVALID_STATE) {
+        if (sc !=  SL_STATUS_INVALID_STATE) {
           app_assert_status_f(sc, "Failed to start unprovisioned beaconing\r\n");
         }
         start_advertising();
@@ -158,13 +158,14 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       break;
     default:
       app_log("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
       break;
   }
 }
 
-void start_advertising() {
+void start_advertising()
+{
   sl_status_t sc;
   sc = sl_bt_advertiser_create_set(&advertising_set_handle);
   app_assert_status_f(sc, "sl_bt_advertiser_create_set failed");

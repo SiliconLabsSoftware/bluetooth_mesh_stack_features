@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
   // task(s) if the kernel is present.
   app_init(argc, argv);
 
-
   while (1) {
     // Do not remove this call: Silicon Labs components process action routine
     // must be called from the super loop.

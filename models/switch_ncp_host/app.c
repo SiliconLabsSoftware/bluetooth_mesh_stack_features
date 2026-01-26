@@ -60,9 +60,9 @@
 #define USAGE          "\r\n%s " NCP_HOST_USAGE " [-h]\r\n"
 
 // Options info.
-#define OPTIONS    \
-  "\r\nOPTIONS\r\n"    \
-  NCP_HOST_OPTIONS \
+#define OPTIONS     \
+  "\r\nOPTIONS\r\n" \
+  NCP_HOST_OPTIONS  \
   "    -h  Print this help message.\r\n"
 
 /* Defines  *********************************************************** */
@@ -93,7 +93,7 @@
 
 /// Timer Frequency used
 #define TIMER_CLK_FREQ ((uint32_t)32768)
-/// Convert miliseconds to timer ticks
+/// Convert milliseconds to timer ticks
 #define TIMER_MS_2_TIMERTICK(ms) ((TIMER_CLK_FREQ * ms) / 1000)
 
 #define SL_BTMESH_GENERIC_BASE_REGISTRY_INIT_SIZE 0
@@ -243,11 +243,11 @@ void app_init(int argc, char *argv[])
   sl_bt_system_reboot();
 
   if (-1 == pthread_create(&consoleThreadId,
-                            NULL,
-                            pConsoleThread,
-                            NULL)) {
-     perror("Error creating console thread.\r\n");
-     exit(1);
+                           NULL,
+                           pConsoleThread,
+                           NULL)) {
+    perror("Error creating console thread.\r\n");
+    exit(1);
   }
 
   if (-1 == pthread_create(&appMainThreadId,
@@ -299,10 +299,10 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       resetSwitchVariables();
       // Print boot message.
       app_log("Bluetooth stack booted: v%d.%d.%d-b%d\r\n",
-                   evt->data.evt_system_boot.major,
-                   evt->data.evt_system_boot.minor,
-                   evt->data.evt_system_boot.patch,
-                   evt->data.evt_system_boot.build);
+              evt->data.evt_system_boot.major,
+              evt->data.evt_system_boot.minor,
+              evt->data.evt_system_boot.patch,
+              evt->data.evt_system_boot.build);
 
       // Initialize Mesh stack in Node operation mode,
       // wait for initialized event
@@ -344,8 +344,8 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 
     case sl_bt_evt_connection_parameters_id:
       app_log("Connection params: interval %d, timeout %d\r\n",
-                evt->data.evt_connection_parameters.interval,
-                evt->data.evt_connection_parameters.timeout);
+              evt->data.evt_connection_parameters.interval,
+              evt->data.evt_connection_parameters.timeout);
       break;
 
     case sl_bt_evt_advertiser_timeout_id:
@@ -354,10 +354,10 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 
     default:
       app_log_debug("Unhandled event [0x%08x]\r\n",
-                SL_BT_MSG_ID(evt->header));
+                    SL_BT_MSG_ID(evt->header));
       break;
-    // -------------------------------
-    // Default event handler.
+      // -------------------------------
+      // Default event handler.
   }
 }
 
@@ -367,7 +367,6 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
  *
  * @param[in] evt Event coming from the Bluetooth Mesh stack.
  *****************************************************************************/
-
 void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
 {
   uint16_t result = 0;
@@ -421,7 +420,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
 
     case sl_btmesh_evt_node_key_added_id:
       app_log("Got new %s key with index %x\r\n", evt->data.evt_node_key_added.type == 0 ? "network" : "application",
-                evt->data.evt_node_key_added.index);
+              evt->data.evt_node_key_added.index);
 
       app_log("Timer added");
       // try to init lpn 5 seconds after adding key
@@ -473,10 +472,10 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
 
     default:
       app_log_debug("Unhandled event [0x%08x]\r\n",
-                SL_BT_MSG_ID(evt->header));
+                    SL_BT_MSG_ID(evt->header));
       break;
-    // -------------------------------
-    // Default event handler.
+      // -------------------------------
+      // Default event handler.
   }
 }
 
@@ -552,7 +551,7 @@ void lpn_init(void)
   // Configure the lpn with following parameters:
   // - Minimum friend queue length = 2
   // - Poll timeout = 5 seconds
-  
+
   // Configure LPN minimum friend queue length
   result = sl_btmesh_lpn_config(0, 2);
   if (result) {
@@ -605,7 +604,7 @@ void lpn_deinit(void)
 void *pConsoleThread(void *pIn)
 {
   consoleInit();
-  for (;;) {
+  for (;; ) {
     app_log("$ ");
     getCMD();
     usleep(80 * 1000);
@@ -615,17 +614,19 @@ void *pConsoleThread(void *pIn)
 
 void *pAppMainThread(void *pIn)
 {
-  for (;;) {
+  for (;; ) {
     execCMD();
-    if(isTimerElapsed()) {
+    if (isTimerElapsed()) {
       timerHandle(getElapsedTimer());
     }
-  };
+  }
+  ;
 
   return NULL;
 }
 
-void timerHandle(int handle) {
+void timerHandle(int handle)
+{
   uint16_t result = 0;
   switch (handle) {
     case TIMER_ID_RETRANS:
@@ -643,7 +644,7 @@ void timerHandle(int handle) {
           break;
       }
       // stop retransmission timer if it was the last attempt
-        app_log("ret.code %d\r\n", request_count);
+      app_log("ret.code %d\r\n", request_count);
       if (request_count == 0) {
         startTimer(0, TIMER_ID_RETRANS);
       }
@@ -707,11 +708,11 @@ static void outputUsage(void)
   app_log("Command\t\tUsage\t\tDescription\r\n");
   for (int i = 0; i < CMD_NUM(); i++) {
     app_log("%s%s%s%s%s\r\n",
-              CMDs[i].command,
-              CMDs[i].p1,
-              CMDs[i].usage,
-              CMDs[i].p2,
-              CMDs[i].desc);
+            CMDs[i].command,
+            CMDs[i].p1,
+            CMDs[i].usage,
+            CMDs[i].p2,
+            CMDs[i].desc);
   }
   app_log("-------------------------------------------------------------\r\n");
 }
@@ -722,8 +723,8 @@ static int findCmdLoc(uint8_t argc, const char *argv[])
 
   for (int i = 0; i < argc; i++) {
     app_log_debug("PARAM[%d] = [%s]\r\n",
-             i,
-             argv[i]);
+                  i,
+                  argv[i]);
   }
 
   for (; pos < CMD_NUM(); pos++) {
@@ -746,7 +747,7 @@ static int execCMD(void)
   if (BUF_PENDING()) {
     strcpy(locBuf, commandBuf[bufReadOffset]);
     app_log_debug("Echo CMD [%s]\r\n",
-             commandBuf[bufReadOffset]);
+                  commandBuf[bufReadOffset]);
     ID_INCREMENT(bufReadOffset);
     valid = 1;
   }
@@ -779,14 +780,14 @@ static int execCMD(void)
 
   if (ret) {
     app_log_error("[[%s]] CMD failed with error code [0x%04x]\r\n",
-             argv[0],
-             ret);
+                  argv[0],
+                  ret);
     err = 2;
     goto out;
   }
 
   app_log("[[%s]] CMD success\r\n",
-            argv[0]);
+          argv[0]);
 
   out:
   if (argv) {
@@ -1047,7 +1048,7 @@ static int onOffExec(int argc, const char *argv[])
   }
 
   app_log("Set light %s\r\n",
-            on == 1 ? "on" : "off");
+          on == 1 ? "on" : "off");
 
   switch_pos = on;
   lightness_percent = (switch_pos == 1) ? 100 : 0;
@@ -1111,7 +1112,7 @@ static int lightnessExec(int argc,
   }
 
   app_log("Set lightness to %d%%\r\n",
-            (uint8_t)per);
+          (uint8_t)per);
 
   lightness_percent = (uint8_t)per;
   lightness_level = lightness_percent * 0xFFFF / 100;
@@ -1174,7 +1175,7 @@ static int ctlExec(int argc,
   }
 
   app_log("Set Color Temperature to %d%%\r\n",
-            (uint8_t)per);
+          (uint8_t)per);
 
   colorTemperaturePercent = (uint8_t)per;
   temperature_level = TEMPERATURE_MIN + (colorTemperaturePercent * colorTemperaturePercent / 100) * (TEMPERATURE_MAX - TEMPERATURE_MIN) / 100;
@@ -1228,7 +1229,7 @@ static int factoryResetExec(int argc, const char *argv[])
   }
 
   app_log("%s Resetting...\r\n",
-            reset == 1 ? "Factory" : "Normal");
+          reset == 1 ? "Factory" : "Normal");
 
   initiate_factory_reset(reset);
   return 0;

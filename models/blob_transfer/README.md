@@ -49,7 +49,7 @@ This project README assumes that the reader is familiar with the usage of Silico
   ![install_button_press](images/install_button_press.png)
 
   - Import the DCD configuration file (overwriting the default one). This will add the two necessary Vendor Models for the BLOB ID and Server Address exchanges.
-  
+
   ![import_dcd_config](images/import_dcd_config.png)
   ![dcd_vendor_models_1](images/dcd_vendor_models_1.png)
 

@@ -49,7 +49,7 @@
 #define SERVER_LIMIT                   4
 #define REMOTE_LIMIT                   4
 
-static const uint8_t fixed_netkey[16] = {0x23, 0x98, 0xdf, 0xa5, 0x09, 0x3e, 0x74, 0xbb, 0xc2, 0x45, 0x1f, 0xae, 0xea, 0xd7, 0x67, 0xcd};
+static const uint8_t fixed_netkey[16] = { 0x23, 0x98, 0xdf, 0xa5, 0x09, 0x3e, 0x74, 0xbb, 0xc2, 0x45, 0x1f, 0xae, 0xea, 0xd7, 0x67, 0xcd };
 static const uint8_t network_id = 0x0;
 static const uint16_t enc_netkey_index = 0x0;
 
@@ -67,10 +67,10 @@ typedef struct {
 } server_device_t;
 
 static const char remote_server_id[] = "RemoteServer";
-static const uuid_128 empty_uuid = {{0x00}};
-static const bd_addr empty_addr = {{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-static const remote_device_t remote_placeholder = {empty_uuid, 0x0};
-static const server_device_t server_placeholder = {empty_uuid, empty_addr, 0x0, 0x0, {}};
+static const uuid_128 empty_uuid = { { 0x00 } };
+static const bd_addr empty_addr = { { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
+static const remote_device_t remote_placeholder = { empty_uuid, 0x0 };
+static const server_device_t server_placeholder = { empty_uuid, empty_addr, 0x0, 0x0, {} };
 server_device_t server_list[SERVER_LIMIT];
 
 uuid_128 remote_uuid_to_provision = empty_uuid;
@@ -87,9 +87,9 @@ SL_WEAK void app_init(void)
   app_log("boot\r\n");
 
   // Fill up the server list
-  for(uint8_t index = 0; index < SERVER_LIMIT; index++) {
+  for (uint8_t index = 0; index < SERVER_LIMIT; index++) {
     server_list[index] = server_placeholder;
-    for(uint8_t index2 = 0; index2 < REMOTE_LIMIT; index2++) {
+    for (uint8_t index2 = 0; index2 < REMOTE_LIMIT; index2++) {
       server_list[index].remote_devices[index2] = remote_placeholder;
     }
   }
@@ -145,13 +145,15 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
                     evt->data.evt_scanner_legacy_advertisement_report.address.addr[1],
                     evt->data.evt_scanner_legacy_advertisement_report.address.addr[0]);*/
       // We found a remote server
-      if(!strcmp(remote_server_id, (char*)evt->data.evt_scanner_legacy_advertisement_report.data.data)) {
+      if (!strcmp(remote_server_id, (char*)evt->data.evt_scanner_legacy_advertisement_report.data.data)) {
         app_log("Remote Provisioning Server device noticed\r\n");
-        for(uint8_t index = 0; index < SERVER_LIMIT; index++) {
+        for (uint8_t index = 0; index < SERVER_LIMIT; index++) {
           // We already have this server in list
-          if(!memcmp(evt->data.evt_scanner_legacy_advertisement_report.address.addr, server_list[index].address.addr, sizeof(evt->data.evt_scanner_legacy_advertisement_report.address.addr))) break;
+          if (!memcmp(evt->data.evt_scanner_legacy_advertisement_report.address.addr, server_list[index].address.addr, sizeof(evt->data.evt_scanner_legacy_advertisement_report.address.addr))) {
+            break;
+          }
           // We found an empty space in the list
-          if(!memcmp(empty_addr.addr, server_list[index].address.addr, sizeof(empty_addr.addr))) {
+          if (!memcmp(empty_addr.addr, server_list[index].address.addr, sizeof(empty_addr.addr))) {
             // Add the newly-found server to our list
             server_list[index].address = evt->data.evt_scanner_legacy_advertisement_report.address;
             break;
@@ -165,8 +167,8 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
       break;
     default:
       app_log_debug("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                         (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                         (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
+                    (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+                    (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
       break;
   }
 }
@@ -184,7 +186,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
     case sl_btmesh_evt_prov_initialized_id:
       // Create the network
       sc = sl_btmesh_prov_create_network(network_id, 16, fixed_netkey);
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
         app_log("sl_btmesh_prov_create_network: failed 0x%.2lx\r\n", sc);
       } else {
@@ -205,8 +207,8 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
     case sl_btmesh_evt_prov_unprov_beacon_id:
       // Unprovisioned device found
       /*app_log_debug("URI hash: 0x%lx\r\n",evt->data.evt_prov_unprov_beacon.uri_hash);
-      app_log_debug("bearer: 0x%x\r\n",evt->data.evt_prov_unprov_beacon.bearer);
-      app_log_debug("address: 0x%x:0x%x:0x%x:0x%x:0x%x:0x%x\r\n",
+         app_log_debug("bearer: 0x%x\r\n",evt->data.evt_prov_unprov_beacon.bearer);
+         app_log_debug("address: 0x%x:0x%x:0x%x:0x%x:0x%x:0x%x\r\n",
                     evt->data.evt_prov_unprov_beacon.address.addr[0],
                     evt->data.evt_prov_unprov_beacon.address.addr[1],
                     evt->data.evt_prov_unprov_beacon.address.addr[2],
@@ -215,10 +217,12 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                     evt->data.evt_prov_unprov_beacon.address.addr[5]);*/
 
       // Check all the prerecorded server addresses
-      for(uint8_t index = 0; index < SERVER_LIMIT; index++) {
+      for (uint8_t index = 0; index < SERVER_LIMIT; index++) {
         // If we found the address in the server_list, provision the device directly
-        if(!memcmp(evt->data.evt_prov_unprov_beacon.address.addr, server_list[index].address.addr, sizeof(evt->data.evt_prov_unprov_beacon.address.addr))) {
-          if(server_list[index].is_provisioned) break;
+        if (!memcmp(evt->data.evt_prov_unprov_beacon.address.addr, server_list[index].address.addr, sizeof(evt->data.evt_prov_unprov_beacon.address.addr))) {
+          if (server_list[index].is_provisioned) {
+            break;
+          }
           app_log("Provisioning a Remote Server Provisioning device\r\n");
           server_list[index].uuid = evt->data.evt_prov_unprov_beacon.uuid;
           sc = sl_btmesh_prov_create_provisioning_session(network_id, evt->data.evt_prov_unprov_beacon.uuid, 0);
@@ -235,16 +239,19 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       // New device provisioned (both direct and remote!)
       char *device_type = "remote";
       // Roll through the server_list, if provisioned device is found by uuid, save the primary element address (where the Remote Provisioning Server Model should be)
-      for(uint8_t index = 0; index < SERVER_LIMIT; index++) {
-        if(!memcmp(evt->data.evt_prov_device_provisioned.uuid.data, server_list[index].uuid.data, sizeof(evt->data.evt_prov_unprov_beacon.uuid.data))) {
+      for (uint8_t index = 0; index < SERVER_LIMIT; index++) {
+        if (!memcmp(evt->data.evt_prov_device_provisioned.uuid.data, server_list[index].uuid.data, sizeof(evt->data.evt_prov_unprov_beacon.uuid.data))) {
           server_list[index].primary_element_address = evt->data.evt_prov_device_provisioned.address;
           device_type = "server";
           break;
         }
       }
       app_log("New %s device provisioned: %x\r\n", device_type, evt->data.evt_prov_device_provisioned.address);
-      if(!strcmp(device_type, "server")) app_log("Press BTN0 to scan for remote unprovisioned devices!\r\n");
-      else remote_uuid_to_provision = empty_uuid;
+      if (!strcmp(device_type, "server")) {
+        app_log("Press BTN0 to scan for remote unprovisioned devices!\r\n");
+      } else {
+        remote_uuid_to_provision = empty_uuid;
+      }
       break;
     // This part is triggered by button press!
     case sl_btmesh_evt_remote_provisioning_client_scan_capabilities_id:
@@ -282,32 +289,36 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                     evt->data.evt_remote_provisioning_client_scan_report.uri);
       // Look for our server
       int8_t server_index = -1;
-      for(int8_t index = 0; index < SERVER_LIMIT; index++) {
-        if(evt->data.evt_remote_provisioning_client_scan_report.server == server_list[index].primary_element_address) server_index = index;
+      for (int8_t index = 0; index < SERVER_LIMIT; index++) {
+        if (evt->data.evt_remote_provisioning_client_scan_report.server == server_list[index].primary_element_address) {
+          server_index = index;
+        }
       }
-      if(server_index == -1) {
+      if (server_index == -1) {
         app_log_warning("server not found!\r\n");
         break;
       }
 
       // Look for the remote
       int8_t remote_index = -1;
-      for(int8_t index = 0; index < REMOTE_LIMIT; index++) {
+      for (int8_t index = 0; index < REMOTE_LIMIT; index++) {
         // Remote is already in the list
-        if(!memcmp(evt->data.evt_remote_provisioning_client_scan_report.uuid.data, server_list[server_index].remote_devices[index].uuid.data, sizeof(evt->data.evt_remote_provisioning_client_scan_report.uuid.data))) {
+        if (!memcmp(evt->data.evt_remote_provisioning_client_scan_report.uuid.data, server_list[server_index].remote_devices[index].uuid.data, sizeof(evt->data.evt_remote_provisioning_client_scan_report.uuid.data))) {
           remote_index = -2;
           break;
         }
         // First empty place found
-        if(!memcmp(empty_uuid.data, server_list[server_index].remote_devices[index].uuid.data, sizeof(empty_uuid.data))) {
+        if (!memcmp(empty_uuid.data, server_list[server_index].remote_devices[index].uuid.data, sizeof(empty_uuid.data))) {
           remote_index = index;
           break;
         }
       }
       // Remote is in list, break silently
-      if(remote_index == -2) break;
+      if (remote_index == -2) {
+        break;
+      }
       // Remote list is full
-      if(remote_index == -1) {
+      if (remote_index == -1) {
         app_log_warning("remote_list full\r\n");
         break;
       }
@@ -324,7 +335,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                     evt->data.evt_remote_provisioning_client_link_status.server,
                     evt->data.evt_remote_provisioning_client_link_status.status,
                     evt->data.evt_remote_provisioning_client_link_status.state);
-    break;
+      break;
 
     case sl_btmesh_evt_remote_provisioning_client_link_report_id:
       // Report about the link changes
@@ -335,26 +346,25 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                     evt->data.evt_remote_provisioning_client_link_report.reason);
 
       // If we successfully opened the link via the Remote Provisioning Server, start the provisioning session
-      if(evt->data.evt_remote_provisioning_client_link_report.status == sl_btmesh_remote_provisioning_server_success) {
+      if (evt->data.evt_remote_provisioning_client_link_report.status == sl_btmesh_remote_provisioning_server_success) {
         // Provision the remote device
         sc = sl_btmesh_prov_create_provisioning_session(network_id, remote_uuid_to_provision, 0);
         app_assert_status_f(sc, "sl_btmesh_prov_create_provisioning_session failed\r\n");
         sc = sl_btmesh_prov_provision_remote_device(remote_uuid_to_provision,
                                                     evt->data.evt_remote_provisioning_client_link_report.server);
         app_assert_status_f(sc, "sl_btmesh_prov_provision_adv_device failed\r\n");
-
       }
-    break;
+      break;
     // Provisioning failed
     case sl_btmesh_evt_prov_provisioning_failed_id:
       app_log_debug("%x\r\n%x\r\n",
                     evt->data.evt_prov_provisioning_failed.reason,
                     evt->data.evt_prov_provisioning_failed.uuid.data[0]);
-    break;
+      break;
     default:
       app_log_debug("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                         (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                         (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
+                    (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+                    (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
       break;
   }
 }
@@ -368,8 +378,8 @@ void app_button_press_cb(uint8_t button, uint8_t duration)
       // Handling of button press greater than 1s and less than 5s
       if (button == BUTTON_0) {
         // Iterate over all the Remote Provisioning Servers and scan for the capabilities
-        for(uint8_t index = 0; index < SERVER_LIMIT; index++) {
-          if(memcmp(empty_addr.addr, server_list[index].address.addr, sizeof(empty_addr.addr))) {
+        for (uint8_t index = 0; index < SERVER_LIMIT; index++) {
+          if (memcmp(empty_addr.addr, server_list[index].address.addr, sizeof(empty_addr.addr))) {
             sc = sl_btmesh_remote_provisioning_client_get_scan_capabilities(enc_netkey_index,
                                                                             server_list[index].primary_element_address,
                                                                             0);
@@ -377,27 +387,31 @@ void app_button_press_cb(uint8_t button, uint8_t duration)
           }
         }
       } else {
-          if(memcmp(remote_uuid_to_provision.data, empty_uuid.data, sizeof(remote_uuid_to_provision.data))) {
-            app_log_warning("Provisioning in progress\r\n");
+        if (memcmp(remote_uuid_to_provision.data, empty_uuid.data, sizeof(remote_uuid_to_provision.data))) {
+          app_log_warning("Provisioning in progress\r\n");
+          return;
+        }
+        for (uint8_t index = 0; index < SERVER_LIMIT; index++) {
+          for (uint8_t index2 = 0; index2 < REMOTE_LIMIT; index2++) {
+            // Ignore the device, if it is already provisioned
+            if (server_list[index].remote_devices[index2].is_provisioned) {
+              continue;
+            }
+            // Break, if we reached an empty device
+            if (!memcmp(empty_uuid.data, server_list[index].remote_devices[index2].uuid.data, sizeof(empty_uuid.data))) {
+              break;
+            }
+            // Open link to the remote device
+            remote_uuid_to_provision = server_list[index].remote_devices[index2].uuid;
+            sc = sl_btmesh_remote_provisioning_client_open_link(enc_netkey_index,
+                                                                server_list[index].primary_element_address,
+                                                                0,
+                                                                10,
+                                                                0xff,
+                                                                remote_uuid_to_provision);
+            app_assert_status_f(sc, "sl_btmesh_remote_provisioning_client_open_link failed\r\n");
+            server_list[index].remote_devices[index2].is_provisioned = 0x1;
             return;
-          }
-          for(uint8_t index = 0; index < SERVER_LIMIT; index++) {
-            for(uint8_t index2 = 0; index2 < REMOTE_LIMIT; index2++) {
-              // Ignore the device, if it is already provisioned
-              if(server_list[index].remote_devices[index2].is_provisioned) continue;
-              // Break, if we reached an empty device
-              if(!memcmp(empty_uuid.data, server_list[index].remote_devices[index2].uuid.data, sizeof(empty_uuid.data))) break;
-              // Open link to the remote device
-              remote_uuid_to_provision = server_list[index].remote_devices[index2].uuid;
-              sc = sl_btmesh_remote_provisioning_client_open_link(enc_netkey_index,
-                                                                  server_list[index].primary_element_address,
-                                                                  0,
-                                                                  10,
-                                                                  0xff,
-                                                                  remote_uuid_to_provision);
-              app_assert_status_f(sc, "sl_btmesh_remote_provisioning_client_open_link failed\r\n");
-              server_list[index].remote_devices[index2].is_provisioned = 0x1;
-              return;
           }
         }
       }
@@ -406,4 +420,3 @@ void app_button_press_cb(uint8_t button, uint8_t duration)
       break;
   }
 }
-

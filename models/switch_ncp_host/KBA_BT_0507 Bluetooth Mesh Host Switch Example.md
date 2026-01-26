@@ -39,7 +39,7 @@ A simple console is implemented to receive commands from user. Users can add any
 The related code example can be found here: [https://github.com/SiliconLabs/bluetooth_mesh_stack_features/tree/master/models/switch_ncp_host](https://github.com/SiliconLabs/bluetooth_mesh_stack_features/tree/master/models/switch_ncp_host)
 
 - Download the attachment and extract it.
-- cd to the foler and run "make SDK_DIR=xxx", where xxx is the real directory of your BT Mesh SDK. Assuming it builds without errors.
+- cd to the folder and run "make SDK_DIR=xxx", where xxx is the real directory of your BT Mesh SDK. Assuming it builds without errors.
 - The executable takes 2 parameters - serial port and baud rate. Run it as "sudo ./exe/switch /dev/ttyACM2 115200"
 - If the shell starts normally, type "h" to get usage example
 - Find a provisioner and light node to test it.

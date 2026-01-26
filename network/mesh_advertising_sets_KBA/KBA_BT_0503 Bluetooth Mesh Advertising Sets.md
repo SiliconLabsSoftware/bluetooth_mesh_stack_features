@@ -42,7 +42,7 @@ This advertising set is reserved for regular BLE advertising. It's created when 
 
 **Advertising Set 1 - Bluetooth Mesh Data**
 
-This advertising set is used for Bluetooth Mesh data traffic, which is the traffic transmitted on the Advertising bearer (Mesh Messsage AD type) (section 3.3.1 of [Mesh Profile v1.0.1](https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457092)) and PB-ADV provisioning bearer (section 5.2.1 of [Mesh Profile v1.0.1](https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457092)) . The stack is in control of the advertising data and the advertising parameters for this set. The user application MUST NOT override the parameters or use this set for any other purpose.
+This advertising set is used for Bluetooth Mesh data traffic, which is the traffic transmitted on the Advertising bearer (Mesh Message AD type) (section 3.3.1 of [Mesh Profile v1.0.1](https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457092)) and PB-ADV provisioning bearer (section 5.2.1 of [Mesh Profile v1.0.1](https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457092)). The stack is in control of the advertising data and the advertising parameters for this set. The user application MUST NOT override the parameters or use this set for any other purpose.
 
 **Advertising Set 2 - Bluetooth Mesh Unprovisioned Device Beacon Without URI**
 

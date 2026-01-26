@@ -192,7 +192,6 @@ static void set_device_name(bd_addr *addr)
   lcd_print(name, SL_BTMESH_WSTK_LCD_ROW_NAME_CFG_VAL);
 }
 
-
 /***************************************************************************//**
  * Handles button press and does a factory reset
  *

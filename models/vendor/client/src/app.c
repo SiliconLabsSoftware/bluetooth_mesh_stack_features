@@ -180,9 +180,9 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
   switch (SL_BT_MSG_ID(evt->header)) {
     case sl_bt_evt_system_boot_id:
       // Factory reset the device if Button 0 or 1 is being pressed during reset
-      if((sl_simple_button_get_state(&sl_button_btn0) == SL_SIMPLE_BUTTON_PRESSED) || (sl_simple_button_get_state(&sl_button_btn1) == SL_SIMPLE_BUTTON_PRESSED)) {
-          factory_reset();
-          break;
+      if ((sl_simple_button_get_state(&sl_button_btn0) == SL_SIMPLE_BUTTON_PRESSED) || (sl_simple_button_get_state(&sl_button_btn1) == SL_SIMPLE_BUTTON_PRESSED)) {
+        factory_reset();
+        break;
       }
       // Initialize Mesh stack in Node operation mode,
       // wait for initialized event
@@ -200,36 +200,36 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
     // Handle Button Presses
     case sl_bt_evt_system_external_signal_id: {
       uint8_t opcode = 0, length = 0, data = 0;
-      if(evt->data.evt_system_external_signal.extsignals & EX_B0_PRESS) {
-          opcode = temperature_get;
-          app_log("PB0 Pressed.\r\n");
+      if (evt->data.evt_system_external_signal.extsignals & EX_B0_PRESS) {
+        opcode = temperature_get;
+        app_log("PB0 Pressed.\r\n");
       }
-      if(evt->data.evt_system_external_signal.extsignals & EX_B0_LONG_PRESS) {
-          opcode = update_interval_set_unack;
+      if (evt->data.evt_system_external_signal.extsignals & EX_B0_LONG_PRESS) {
+        opcode = update_interval_set_unack;
+        length = 1;
+        data = periods[period_idx];
+        if (period_idx == sizeof(periods) - 1) {
+          period_idx = 0;
+        } else {
+          period_idx++;
+        }
+        app_log("B0 Long Pressed.\r\n");
+      }
+      if (evt->data.evt_system_external_signal.extsignals & EX_B1_PRESS) {
+        opcode = unit_get;
+        app_log("PB1 Pressed.\r\n");
+      }
+      if (evt->data.evt_system_external_signal.extsignals & EX_B1_LONG_PRESS) {
+        if (unit == celsius) {
+          opcode = unit_set_unack;
           length = 1;
-          data = periods[period_idx];
-          if(period_idx == sizeof(periods) - 1) {
-              period_idx = 0;
-          } else {
-              period_idx++;
-          }
-          app_log("B0 Long Pressed.\r\n");
-      }
-      if(evt->data.evt_system_external_signal.extsignals & EX_B1_PRESS) {
-          opcode = unit_get;
-          app_log("PB1 Pressed.\r\n");
-      }
-      if(evt->data.evt_system_external_signal.extsignals & EX_B1_LONG_PRESS) {
-          if (unit == celsius) {
-              opcode = unit_set_unack;
-              length = 1;
-              data = fahrenheit;
-          } else {
-            opcode = unit_set;
-            length = 1;
-            data = celsius;
-          }
-          app_log("B1 Long Pressed.\r\n");
+          data = fahrenheit;
+        } else {
+          opcode = unit_set;
+          length = 1;
+          data = celsius;
+        }
+        app_log("B1 Long Pressed.\r\n");
       }
       sc = sl_btmesh_vendor_model_set_publication(my_model.elem_index,
                                                   my_model.vendor_id,
@@ -238,7 +238,7 @@ void sl_bt_on_event(struct sl_bt_msg *evt)
                                                   1,
                                                   length,
                                                   &data);
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         app_log("Set publication error: 0x%04lX\r\n", sc);
       } else {
         app_log("Set publication done. Publishing...\r\n");
@@ -281,7 +281,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                        my_model.opcodes_data);
       app_assert_status_f(sc, "Failed to initialize vendor model\r\n");
 
-      if(evt->data.evt_node_initialized.provisioned) {
+      if (evt->data.evt_node_initialized.provisioned) {
         app_log("Node already provisioned.\r\n");
       } else {
         app_log("Node unprovisioned\r\n");
@@ -434,8 +434,8 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
               rx_evt->nonrelayed,
               rx_evt->opcode,
               rx_evt->final);
-      for(int i = 0; i < evt->data.evt_vendor_model_receive.payload.len; i++) {
-          app_log("%x ", evt->data.evt_vendor_model_receive.payload.data[i]);
+      for (int i = 0; i < evt->data.evt_vendor_model_receive.payload.len; i++) {
+        app_log("%x ", evt->data.evt_vendor_model_receive.payload.data[i]);
       }
       app_log("\r\n");
 
@@ -476,7 +476,7 @@ void app_button_press_cb(uint8_t button, uint8_t duration)
   // Selecting action by duration
   switch (duration) {
     case APP_BUTTON_PRESS_DURATION_SHORT:
-      // Handling of button press less than 0.25s
+    // Handling of button press less than 0.25s
     case APP_BUTTON_PRESS_DURATION_MEDIUM:
       // Handling of button press greater than 0.25s and less than 1s
       if (button == BUTTON_PRESS_BUTTON_0) {
@@ -486,7 +486,7 @@ void app_button_press_cb(uint8_t button, uint8_t duration)
       }
       break;
     case APP_BUTTON_PRESS_DURATION_LONG:
-      // Handling of button press greater than 1s and less than 5s
+    // Handling of button press greater than 1s and less than 5s
     case APP_BUTTON_PRESS_DURATION_VERYLONG:
       if (button == BUTTON_PRESS_BUTTON_0) {
         sl_bt_external_signal(EX_B0_LONG_PRESS);
@@ -517,8 +517,8 @@ static void app_reset_timer_cb(app_timer_t *handle, void *data)
 static app_timer_t app_reset_timer;
 static void delay_reset_ms(uint32_t ms)
 {
-  if(ms < 10) {
-      ms = 10;
+  if (ms < 10) {
+    ms = 10;
   }
   app_timer_start(&app_reset_timer,
                   ms,
@@ -526,7 +526,6 @@ static void delay_reset_ms(uint32_t ms)
                   NULL,
                   false);
 }
-
 
 /// Update Interval
 static void parse_period(uint8_t interval)
@@ -549,12 +548,12 @@ static void parse_period(uint8_t interval)
       break;
   }
   if (periodic_timer_ms) {
-      app_log("Update period [hh:mm:ss:ms]= %02ld:%02ld:%02ld:%04ld\r\n",
-              (periodic_timer_ms / (1000 * 60 * 60)),
-              (periodic_timer_ms % (1000 * 60 * 60)) / (1000 * 60),
-              (periodic_timer_ms % (1000 * 60)) / 1000,
-              ((periodic_timer_ms % (1000)) / 1000) * 100);
+    app_log("Update period [hh:mm:ss:ms]= %02ld:%02ld:%02ld:%04ld\r\n",
+            (periodic_timer_ms / (1000 * 60 * 60)),
+            (periodic_timer_ms % (1000 * 60 * 60)) / (1000 * 60),
+            (periodic_timer_ms % (1000 * 60)) / 1000,
+            ((periodic_timer_ms % (1000)) / 1000) * 100);
   } else {
-      app_log("Periodic update off.\r\n");
+    app_log("Periodic update off.\r\n");
   }
 }

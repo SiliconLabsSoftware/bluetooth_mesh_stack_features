@@ -78,4 +78,4 @@ The host network manager supports below functionalities:
 
 - NCP target – WSTK with Bluetooth Mesh compatible radio boards - EFR32xG12, EFR32xG13 or EFR32MG21 (x= M, B) based.
 
-- NCP host - **POSIX compatiable** machine to run the host application, **THIS HAS ONLY BEEN TESTED ON Linux and MacOS**. Running the application on Windows or other platforms probably needs some porting effort.
+- NCP host - **POSIX compatible** machine to run the host application, **THIS HAS ONLY BEEN TESTED ON Linux and MacOS**. Running the application on Windows or other platforms probably needs some porting effort.

@@ -1,6 +1,6 @@
 /***************************************************************************//**
  * @file
-  * @brief Silicon Labs Bluetooth mesh light example this example implements an
+ * @brief Silicon Labs Bluetooth mesh light example this example implements an
  * Embedded provisioner.
  *******************************************************************************
  * # License
@@ -87,8 +87,8 @@ typedef struct {
 
 device_table_entry_t bluetooth_device_table[MAX_NUM_BTMESH_DEV];
 
-static const uint8_t fixed_netkey[16] = {0x23, 0x98, 0xdf, 0xa5, 0x09, 0x3e, 0x74, 0xbb, 0xc2, 0x45, 0x1f, 0xae, 0xea, 0xd7, 0x67, 0xcd};
-static const uint8_t fixed_appkey[16] = {0x16, 0x39, 0x38, 0x03, 0x9b, 0x8d, 0x8a, 0x20, 0x81, 0x60, 0xa7, 0x93, 0x33, 0x3d, 0x03, 0x61};
+static const uint8_t fixed_netkey[16] = { 0x23, 0x98, 0xdf, 0xa5, 0x09, 0x3e, 0x74, 0xbb, 0xc2, 0x45, 0x1f, 0xae, 0xea, 0xd7, 0x67, 0xcd };
+static const uint8_t fixed_appkey[16] = { 0x16, 0x39, 0x38, 0x03, 0x9b, 0x8d, 0x8a, 0x20, 0x81, 0x60, 0xa7, 0x93, 0x33, 0x3d, 0x03, 0x61 };
 
 /// Length of the display name buffer
 #define NAME_BUF_LEN                   20
@@ -130,7 +130,6 @@ typedef struct {
   uint16_t sub_address[4];
   uint8_t num_sub;
   uint8_t num_sub_done;
-
 } tsConfig;
 
 // config data to be sent to last provisioned node:
@@ -343,11 +342,11 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
     case sl_btmesh_evt_prov_initialized_id: {
       app_log("sl_btmesh_evt_prov_initialized_id\r\n");
       sc = sl_btmesh_prov_create_network(network_id, 16, fixed_netkey);
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
-          app_log("sl_btmesh_prov_create_network: failed 0x%.2lx\r\n", sc);
+        app_log("sl_btmesh_prov_create_network: failed 0x%.2lx\r\n", sc);
       } else {
-          app_log("Success, netkey id = %x\r\n", network_id);
+        app_log("Success, netkey id = %x\r\n", network_id);
       }
 
       size_t max_application_key_size = 16;
@@ -355,11 +354,11 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       uint8_t application_key[16];
       sc = sl_btmesh_prov_create_appkey(network_id, appkey_index, 16, fixed_appkey, max_application_key_size, &application_key_len, application_key);
 
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
-          app_log("sl_btmesh_prov_create_appkey: failed 0x%.2lx\r\n", sc);
+        app_log("sl_btmesh_prov_create_appkey: failed 0x%.2lx\r\n", sc);
       } else {
-          app_log("Success, appkey id = %x\r\n", appkey_index);
+        app_log("Success, appkey id = %x\r\n", appkey_index);
       }
 
       /* Networks  */
@@ -375,36 +374,36 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       sl_btmesh_generic_client_init();
 
       sc = sl_btmesh_test_bind_local_model_app(0,
-                                          appkey_index,
-                                          0xFFFF,
-                                          SWITCH_MODEL_ID);
-      if(sc != SL_STATUS_OK) {
+                                               appkey_index,
+                                               0xFFFF,
+                                               SWITCH_MODEL_ID);
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
-          app_log("sl_btmesh_test_bind_local_model_app: failed 0x%.2lx\r\n", sc);
+        app_log("sl_btmesh_test_bind_local_model_app: failed 0x%.2lx\r\n", sc);
       } else {
-          app_log("Success, sl_btmesh_test_bind_local_model_app: 0x%x\r\n", SWITCH_MODEL_ID);
+        app_log("Success, sl_btmesh_test_bind_local_model_app: 0x%x\r\n", SWITCH_MODEL_ID);
       }
 
       sc = sl_btmesh_test_bind_local_model_app(0,
-                                          appkey_index,
-                                          0xFFFF,
-                                          DIM_SWITCH_MODEL_ID);
-      if(sc != SL_STATUS_OK) {
+                                               appkey_index,
+                                               0xFFFF,
+                                               DIM_SWITCH_MODEL_ID);
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
-          app_log("sl_btmesh_test_bind_local_model_app: failed 0x%.2lx\r\n", sc);
+        app_log("sl_btmesh_test_bind_local_model_app: failed 0x%.2lx\r\n", sc);
       } else {
-          app_log("Success, sl_btmesh_test_bind_local_model_app: 0x%x\r\n", DIM_SWITCH_MODEL_ID);
+        app_log("Success, sl_btmesh_test_bind_local_model_app: 0x%x\r\n", DIM_SWITCH_MODEL_ID);
       }
 
       sc = sl_btmesh_test_add_local_model_sub(0,
-                                         0xFFFF,
-                                         SWITCH_MODEL_ID,
-                                         LIGHT_STATUS_GRP_ADDR);
-      if(sc != SL_STATUS_OK) {
+                                              0xFFFF,
+                                              SWITCH_MODEL_ID,
+                                              LIGHT_STATUS_GRP_ADDR);
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
-          app_log("sl_btmesh_test_add_local_model_sub: failed 0x%.2lx\r\n", sc);
+        app_log("sl_btmesh_test_add_local_model_sub: failed 0x%.2lx\r\n", sc);
       } else {
-          app_log("Success, sl_btmesh_test_add_local_model_sub: 0x%x\r\n", SWITCH_MODEL_ID);
+        app_log("Success, sl_btmesh_test_add_local_model_sub: 0x%x\r\n", SWITCH_MODEL_ID);
       }
 
       sc = sl_btmesh_test_set_local_model_pub(0,
@@ -416,22 +415,22 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                               0,
                                               0,
                                               0);
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
-          app_log("sl_btmesh_test_set_local_model_pub: failed 0x%.2lx\r\n", sc);
+        app_log("sl_btmesh_test_set_local_model_pub: failed 0x%.2lx\r\n", sc);
       } else {
-          app_log("Success, sl_btmesh_test_set_local_model_pub: 0x%x\r\n", SWITCH_MODEL_ID);
+        app_log("Success, sl_btmesh_test_set_local_model_pub: 0x%x\r\n", SWITCH_MODEL_ID);
       }
 
       sc = sl_btmesh_test_add_local_model_sub(0,
-                                         0xFFFF,
-                                         DIM_SWITCH_MODEL_ID,
-                                         LIGHT_STATUS_GRP_ADDR);
-      if(sc != SL_STATUS_OK) {
+                                              0xFFFF,
+                                              DIM_SWITCH_MODEL_ID,
+                                              LIGHT_STATUS_GRP_ADDR);
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
-          app_log("sl_btmesh_test_add_local_model_sub: failed 0x%.2lx\r\n", sc);
+        app_log("sl_btmesh_test_add_local_model_sub: failed 0x%.2lx\r\n", sc);
       } else {
-          app_log("Success, sl_btmesh_test_add_local_model_sub: 0x%x\r\n", DIM_SWITCH_MODEL_ID);
+        app_log("Success, sl_btmesh_test_add_local_model_sub: 0x%x\r\n", DIM_SWITCH_MODEL_ID);
       }
 
       sc = sl_btmesh_test_set_local_model_pub(0,
@@ -443,11 +442,11 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
                                               0,
                                               0,
                                               0);
-      if(sc != SL_STATUS_OK) {
+      if (sc != SL_STATUS_OK) {
         /* Something went wrong */
-          app_log("sl_btmesh_test_set_local_model_pub: failed 0x%.2lx\r\n", sc);
+        app_log("sl_btmesh_test_set_local_model_pub: failed 0x%.2lx\r\n", sc);
       } else {
-          app_log("Success, sl_btmesh_test_set_local_model_pub: 0x%x\r\n", DIM_SWITCH_MODEL_ID);
+        app_log("Success, sl_btmesh_test_set_local_model_pub: 0x%x\r\n", DIM_SWITCH_MODEL_ID);
       }
 
       /* Scan for unprovisioned beacons */
@@ -456,40 +455,42 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
     break;
     case sl_btmesh_evt_prov_initialization_failed_id:
       app_log("failed: 0x%x ", evt->data.evt_prov_initialization_failed.result);
-    break;
+      break;
     case sl_btmesh_evt_prov_unprov_beacon_id:
       /* PB-ADV only */
-      if(0 == evt->data.evt_prov_unprov_beacon.bearer) {
+      if (0 == evt->data.evt_prov_unprov_beacon.bearer) {
         /* Get BT mesh device index */
-        dev_idx = IsDevPresent( &evt->data.evt_prov_unprov_beacon.address.addr[0]);
+        dev_idx = IsDevPresent(&evt->data.evt_prov_unprov_beacon.address.addr[0]);
 
         /* fill up btmesh device struct */
-        if( 0 > dev_idx ) {
+        if ( 0 > dev_idx ) {
           /* Device is not present */
-          for(idx = 0; idx < MAX_NUM_BTMESH_DEV; idx++) {
-            if(   ( 0x00 == bluetooth_device_table[idx].address.addr[0] )
-               && ( 0x00 == bluetooth_device_table[idx].address.addr[1] )
-               && ( 0x00 == bluetooth_device_table[idx].address.addr[2] )
-               && ( 0x00 == bluetooth_device_table[idx].address.addr[3] )
-               && ( 0x00 == bluetooth_device_table[idx].address.addr[4] )
-               && ( 0x00 == bluetooth_device_table[idx].address.addr[5] )
-              ) {
+          for (idx = 0; idx < MAX_NUM_BTMESH_DEV; idx++) {
+            if (   (0x00 == bluetooth_device_table[idx].address.addr[0])
+                   && (0x00 == bluetooth_device_table[idx].address.addr[1])
+                   && (0x00 == bluetooth_device_table[idx].address.addr[2])
+                   && (0x00 == bluetooth_device_table[idx].address.addr[3])
+                   && (0x00 == bluetooth_device_table[idx].address.addr[4])
+                   && (0x00 == bluetooth_device_table[idx].address.addr[5])
+                   ) {
               memcpy(&bluetooth_device_table[idx].address.addr[0], &evt->data.evt_prov_unprov_beacon.address.addr[0], BLE_ADDR_LEN_BYTE);
               memcpy(&bluetooth_device_table[idx].uuid.data[0], &evt->data.evt_prov_unprov_beacon.uuid.data[0], BLE_MESH_UUID_LEN_BYTE);
 
               /* Display info banner */
-              app_log("URI hash: 0x%lx ",evt->data.evt_prov_unprov_beacon.uri_hash);
-              app_log("bearer: 0x%x ",evt->data.evt_prov_unprov_beacon.bearer);
+              app_log("URI hash: 0x%lx ", evt->data.evt_prov_unprov_beacon.uri_hash);
+              app_log("bearer: 0x%x ", evt->data.evt_prov_unprov_beacon.bearer);
               app_log("address: 0x%x:0x%x:0x%x:0x%x:0x%x:0x%x ", bluetooth_device_table[idx].address.addr[0],
-                                                                 bluetooth_device_table[idx].address.addr[1],
-                                                                 bluetooth_device_table[idx].address.addr[2],
-                                                                 bluetooth_device_table[idx].address.addr[3],
-                                                                 bluetooth_device_table[idx].address.addr[4],
-                                                                 bluetooth_device_table[idx].address.addr[5]);
-              app_log("(net id) %d (uuid) ",network_id);
-              for (uint8_t i = 0; i < BLE_MESH_UUID_LEN_BYTE; i++) app_log("0x%x:", bluetooth_device_table[idx].uuid.data[i]);
+                      bluetooth_device_table[idx].address.addr[1],
+                      bluetooth_device_table[idx].address.addr[2],
+                      bluetooth_device_table[idx].address.addr[3],
+                      bluetooth_device_table[idx].address.addr[4],
+                      bluetooth_device_table[idx].address.addr[5]);
+              app_log("(net id) %d (uuid) ", network_id);
+              for (uint8_t i = 0; i < BLE_MESH_UUID_LEN_BYTE; i++) {
+                app_log("0x%x:", bluetooth_device_table[idx].uuid.data[i]);
+              }
               app_log("\r\n");
-              app_log("address type: 0x%x",evt->data.evt_prov_unprov_beacon.address_type);
+              app_log("address type: 0x%x", evt->data.evt_prov_unprov_beacon.address_type);
               app_log("\r\n");
               break;
             }
@@ -507,59 +508,59 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       break;
     case sl_btmesh_evt_prov_oob_pkey_request_id:
       app_log("sl_btmesh_evt_prov_oob_pkey_request_id: 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\r\n", evt->data.evt_prov_oob_pkey_request.uuid.data[0],
-                                                                                                       evt->data.evt_prov_oob_pkey_request.uuid.data[1],
-                                                                                                       evt->data.evt_prov_oob_pkey_request.uuid.data[2],
-                                                                                                       evt->data.evt_prov_oob_pkey_request.uuid.data[3],
-                                                                                                       evt->data.evt_prov_oob_pkey_request.uuid.data[4],
-                                                                                                       evt->data.evt_prov_oob_pkey_request.uuid.data[5]);
+              evt->data.evt_prov_oob_pkey_request.uuid.data[1],
+              evt->data.evt_prov_oob_pkey_request.uuid.data[2],
+              evt->data.evt_prov_oob_pkey_request.uuid.data[3],
+              evt->data.evt_prov_oob_pkey_request.uuid.data[4],
+              evt->data.evt_prov_oob_pkey_request.uuid.data[5]);
       break;
     case sl_btmesh_evt_prov_oob_auth_request_id:
       app_log("sl_btmesh_evt_prov_oob_auth_request_id\r\n");
 
-      static uint8array out_of_band_authentication_data = {16,{0x00,0x01,0x01,0x02,0x03,0x05,0x08,0x0D,0x00,0x01,0x01,0x02,0x03,0x05,0x08,0x0D}};
+      static uint8array out_of_band_authentication_data = { 16, { 0x00, 0x01, 0x01, 0x02, 0x03, 0x05, 0x08, 0x0D, 0x00, 0x01, 0x01, 0x02, 0x03, 0x05, 0x08, 0x0D } };
       sl_btmesh_prov_send_oob_auth_response(evt->data.evt_prov_oob_auth_request.uuid,
                                             out_of_band_authentication_data.len,
                                             out_of_band_authentication_data.data);
       break;
     case sl_btmesh_evt_prov_oob_display_input_id:
-      app_log("sl_btmesh_evt_prov_oob_display_input_id: action 0x%.2x \r\n",evt->data.evt_prov_oob_display_input.input_action);
-      app_log("sl_btmesh_evt_prov_oob_display_input_id: size 0x%.2x \r\n",evt->data.evt_prov_oob_display_input.input_size);
+      app_log("sl_btmesh_evt_prov_oob_display_input_id: action 0x%.2x \r\n", evt->data.evt_prov_oob_display_input.input_action);
+      app_log("sl_btmesh_evt_prov_oob_display_input_id: size 0x%.2x \r\n", evt->data.evt_prov_oob_display_input.input_size);
 
       /* data array */
-      app_log("sl_btmesh_evt_prov_oob_display_input_id: data len 0x%.2x \r\n",evt->data.evt_prov_oob_display_input.data.len);
+      app_log("sl_btmesh_evt_prov_oob_display_input_id: data len 0x%.2x \r\n", evt->data.evt_prov_oob_display_input.data.len);
       app_log("sl_btmesh_evt_prov_oob_display_input_id: data 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x 0x%.2x\r\n",
-        evt->data.evt_prov_oob_display_input.data.data[0],
-        evt->data.evt_prov_oob_display_input.data.data[1],
-        evt->data.evt_prov_oob_display_input.data.data[2],
-        evt->data.evt_prov_oob_display_input.data.data[3],
-        evt->data.evt_prov_oob_display_input.data.data[4],
-        evt->data.evt_prov_oob_display_input.data.data[5],
-        evt->data.evt_prov_oob_display_input.data.data[6],
-        evt->data.evt_prov_oob_display_input.data.data[7],
-        evt->data.evt_prov_oob_display_input.data.data[8],
-        evt->data.evt_prov_oob_display_input.data.data[9],
-        evt->data.evt_prov_oob_display_input.data.data[10],
-        evt->data.evt_prov_oob_display_input.data.data[11],
-        evt->data.evt_prov_oob_display_input.data.data[12],
-        evt->data.evt_prov_oob_display_input.data.data[13],
-        evt->data.evt_prov_oob_display_input.data.data[14],
-        evt->data.evt_prov_oob_display_input.data.data[15],
-        evt->data.evt_prov_oob_display_input.data.data[16],
-        evt->data.evt_prov_oob_display_input.data.data[17],
-        evt->data.evt_prov_oob_display_input.data.data[18],
-        evt->data.evt_prov_oob_display_input.data.data[19],
-        evt->data.evt_prov_oob_display_input.data.data[20],
-        evt->data.evt_prov_oob_display_input.data.data[21],
-        evt->data.evt_prov_oob_display_input.data.data[22],
-        evt->data.evt_prov_oob_display_input.data.data[23],
-        evt->data.evt_prov_oob_display_input.data.data[24],
-        evt->data.evt_prov_oob_display_input.data.data[25],
-        evt->data.evt_prov_oob_display_input.data.data[26],
-        evt->data.evt_prov_oob_display_input.data.data[27],
-        evt->data.evt_prov_oob_display_input.data.data[28],
-        evt->data.evt_prov_oob_display_input.data.data[29],
-        evt->data.evt_prov_oob_display_input.data.data[30],
-        evt->data.evt_prov_oob_display_input.data.data[31]);
+              evt->data.evt_prov_oob_display_input.data.data[0],
+              evt->data.evt_prov_oob_display_input.data.data[1],
+              evt->data.evt_prov_oob_display_input.data.data[2],
+              evt->data.evt_prov_oob_display_input.data.data[3],
+              evt->data.evt_prov_oob_display_input.data.data[4],
+              evt->data.evt_prov_oob_display_input.data.data[5],
+              evt->data.evt_prov_oob_display_input.data.data[6],
+              evt->data.evt_prov_oob_display_input.data.data[7],
+              evt->data.evt_prov_oob_display_input.data.data[8],
+              evt->data.evt_prov_oob_display_input.data.data[9],
+              evt->data.evt_prov_oob_display_input.data.data[10],
+              evt->data.evt_prov_oob_display_input.data.data[11],
+              evt->data.evt_prov_oob_display_input.data.data[12],
+              evt->data.evt_prov_oob_display_input.data.data[13],
+              evt->data.evt_prov_oob_display_input.data.data[14],
+              evt->data.evt_prov_oob_display_input.data.data[15],
+              evt->data.evt_prov_oob_display_input.data.data[16],
+              evt->data.evt_prov_oob_display_input.data.data[17],
+              evt->data.evt_prov_oob_display_input.data.data[18],
+              evt->data.evt_prov_oob_display_input.data.data[19],
+              evt->data.evt_prov_oob_display_input.data.data[20],
+              evt->data.evt_prov_oob_display_input.data.data[21],
+              evt->data.evt_prov_oob_display_input.data.data[22],
+              evt->data.evt_prov_oob_display_input.data.data[23],
+              evt->data.evt_prov_oob_display_input.data.data[24],
+              evt->data.evt_prov_oob_display_input.data.data[25],
+              evt->data.evt_prov_oob_display_input.data.data[26],
+              evt->data.evt_prov_oob_display_input.data.data[27],
+              evt->data.evt_prov_oob_display_input.data.data[28],
+              evt->data.evt_prov_oob_display_input.data.data[29],
+              evt->data.evt_prov_oob_display_input.data.data[30],
+              evt->data.evt_prov_oob_display_input.data.data[31]);
       char oob_authvalue[OOB_AUTHVALUE_LEN];
       snprintf(oob_authvalue, OOB_AUTHVALUE_LEN, "OOB AuthValue: %d", evt->data.evt_prov_oob_display_input.data.data[31]);
       lcd_print(oob_authvalue, SL_BTMESH_WSTK_LCD_ROW_STATUS_CFG_VAL);
@@ -574,7 +575,9 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       app_log("Node successfully provisioned. Address: %4.4x, ", provisionee_addr);
 
       app_log("uuid 0x");
-      for (uint8_t i = 0; i < BLE_MESH_UUID_LEN_BYTE; i++) app_log("%02X", provisionee_uuid.data[i]);
+      for (uint8_t i = 0; i < BLE_MESH_UUID_LEN_BYTE; i++) {
+        app_log("%02X", provisionee_uuid.data[i]);
+      }
       app_log("\r\n");
 
       app_log(" getting dcd ...\r\n");
@@ -582,10 +585,9 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       sc = sl_btmesh_config_client_get_dcd(network_id, provisionee_addr, 0, &handle);
       if (sc == 0x0181) {
         app_log(".");
-      } else if(sc != SL_STATUS_OK) {
+      } else if (sc != SL_STATUS_OK) {
         app_log("sl_btmesh_config_client_get_dcd failed with result 0x%lX (%ld) addr %x\r\n", sc, sc, provisionee_addr);
-      }
-      else {
+      } else {
         app_log("requesting DCD from the node...\r\n");
       }
 
@@ -598,7 +600,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
 
       // copy the data into one large array. the data may come in multiple smaller pieces.
       // the data is not decoded until all DCD events have been received (see below)
-      if((_dcd_raw_len + pDCD->data.len) <= 256) {
+      if ((_dcd_raw_len + pDCD->data.len) <= 256) {
         memcpy(&(_dcd_raw[_dcd_raw_len]), pDCD->data.data, pDCD->data.len);
         _dcd_raw_len += pDCD->data.len;
       }
@@ -628,7 +630,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       break;
     case sl_btmesh_evt_config_client_appkey_status_id:
       result = evt->data.evt_config_client_appkey_status.result;
-      if(result == SL_STATUS_OK) {
+      if (result == SL_STATUS_OK) {
         app_log(" appkey added\r\n");
         /* move to next step which is binding appkey to models */
 
@@ -637,9 +639,9 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
         model_id = _sConfig.bind_model[_sConfig.num_bind_done].model_id;
         vendor_id = _sConfig.bind_model[_sConfig.num_bind_done].vendor_id;
 
-        app_log("APP BIND, config %d/%d:: model %4.4x key index %x\r\n", _sConfig.num_bind_done+1, _sConfig.num_bind, model_id, appkey_index);
+        app_log("APP BIND, config %d/%d:: model %4.4x key index %x\r\n", _sConfig.num_bind_done + 1, _sConfig.num_bind, model_id, appkey_index);
 
-        sc = sl_btmesh_config_client_bind_model(network_id, provisionee_addr, 0, vendor_id, model_id, appkey_index, &handle );
+        sc = sl_btmesh_config_client_bind_model(network_id, provisionee_addr, 0, vendor_id, model_id, appkey_index, &handle);
         if (sc == SL_STATUS_OK) {
           app_log("Binding model 0x%4.4x\r\n", model_id);
         } else {
@@ -649,19 +651,19 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       break;
     case sl_btmesh_evt_config_client_binding_status_id:
       result = evt->data.evt_config_client_appkey_status.result;
-      if(result == SL_STATUS_OK) {
+      if (result == SL_STATUS_OK) {
         app_log(" bind complete\r\n");
         _sConfig.num_bind_done++;
 
-        if(_sConfig.num_bind_done < _sConfig.num_bind) {
+        if (_sConfig.num_bind_done < _sConfig.num_bind) {
           // take the next model from the list of models to be bound with application key.
           // for simplicity, the same appkey is used for all models but it is possible to also use several appkeys
           model_id = _sConfig.bind_model[_sConfig.num_bind_done].model_id;
           vendor_id = _sConfig.bind_model[_sConfig.num_bind_done].vendor_id;
 
-          app_log("APP BIND, config %d/%d:: model %4.4x key index %x\r\n", _sConfig.num_bind_done+1, _sConfig.num_bind, model_id, appkey_index);
+          app_log("APP BIND, config %d/%d:: model %4.4x key index %x\r\n", _sConfig.num_bind_done + 1, _sConfig.num_bind, model_id, appkey_index);
 
-          sc = sl_btmesh_config_client_bind_model( network_id, provisionee_addr, 0, vendor_id, model_id, appkey_index, &handle );
+          sc = sl_btmesh_config_client_bind_model(network_id, provisionee_addr, 0, vendor_id, model_id, appkey_index, &handle);
           if (sc == SL_STATUS_OK) {
             app_log("Binding model 0x%4.4x\r\n", model_id);
           } else {
@@ -673,20 +675,20 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
           vendor_id = _sConfig.pub_model[_sConfig.num_pub_done].vendor_id;
           pub_address = _sConfig.pub_address[_sConfig.num_pub_done];
 
-          app_log("PUB SET, config %d/%d: model %4.4x -> address %4.4x\r\n", _sConfig.num_pub_done+1, _sConfig.num_pub, model_id, pub_address);
+          app_log("PUB SET, config %d/%d: model %4.4x -> address %4.4x\r\n", _sConfig.num_pub_done + 1, _sConfig.num_pub, model_id, pub_address);
 
           sc = sl_btmesh_config_client_set_model_pub(network_id, provisionee_addr,
-            0, /* element index */
-            vendor_id,
-            model_id,
-            pub_address,
-            appkey_index,
-            0, /* friendship credential flag */
-            3, /* Publication time-to-live value */
-            0, /* period = NONE */
-            0, /* Publication retransmission count */
-            50,  /* Publication retransmission interval */
-            &handle);
+                                                     0, /* element index */
+                                                     vendor_id,
+                                                     model_id,
+                                                     pub_address,
+                                                     appkey_index,
+                                                     0, /* friendship credential flag */
+                                                     3, /* Publication time-to-live value */
+                                                     0, /* period = NONE */
+                                                     0, /* Publication retransmission count */
+                                                     50, /* Publication retransmission interval */
+                                                     &handle);
 
           if (sc == SL_STATUS_OK) {
             app_log(" waiting pub ack\r\n");
@@ -698,31 +700,31 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       break;
     case sl_btmesh_evt_config_client_model_pub_status_id:
       result = evt->data.evt_config_client_model_pub_status.result;
-      if(result == SL_STATUS_OK) {
+      if (result == SL_STATUS_OK) {
         app_log(" pub set OK\r\n");
         _sConfig.num_pub_done++;
 
-        if(_sConfig.num_pub_done < _sConfig.num_pub) {
+        if (_sConfig.num_pub_done < _sConfig.num_pub) {
           /* more publication settings to be done
           ** get the next model/address pair from the configuration list: */
           model_id = _sConfig.pub_model[_sConfig.num_pub_done].model_id;
           vendor_id = _sConfig.pub_model[_sConfig.num_pub_done].vendor_id;
           pub_address = _sConfig.pub_address[_sConfig.num_pub_done];
 
-          app_log("PUB SET, config %d/%d: model %4.4x -> address %4.4x\r\n", _sConfig.num_pub_done+1, _sConfig.num_pub, model_id, pub_address);
+          app_log("PUB SET, config %d/%d: model %4.4x -> address %4.4x\r\n", _sConfig.num_pub_done + 1, _sConfig.num_pub, model_id, pub_address);
 
           sc = sl_btmesh_config_client_set_model_pub(network_id, provisionee_addr,
-            0, /* element index */
-            vendor_id,
-            model_id,
-            pub_address,
-            appkey_index,
-            0, /* friendship credential flag */
-            3, /* Publication time-to-live value */
-            0, /* period = NONE */
-            0, /* Publication retransmission count */
-            50,  /* Publication retransmission interval */
-            &handle);
+                                                     0, /* element index */
+                                                     vendor_id,
+                                                     model_id,
+                                                     pub_address,
+                                                     appkey_index,
+                                                     0, /* friendship credential flag */
+                                                     3, /* Publication time-to-live value */
+                                                     0, /* period = NONE */
+                                                     0, /* Publication retransmission count */
+                                                     50, /* Publication retransmission interval */
+                                                     &handle);
         } else {
           // move to next step which is configuring subscription settings
           // get the next model/address pair from the configuration list:
@@ -730,7 +732,7 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
           vendor_id = _sConfig.sub_model[_sConfig.num_sub_done].vendor_id;
           sub_address = _sConfig.sub_address[_sConfig.num_sub_done];
 
-          app_log("SUB ADD, config %d/%d: model %4.4x -> address %4.4x\r\n", _sConfig.num_sub_done+1, _sConfig.num_sub, model_id, sub_address);
+          app_log("SUB ADD, config %d/%d: model %4.4x -> address %4.4x\r\n", _sConfig.num_sub_done + 1, _sConfig.num_sub, model_id, sub_address);
 
           sc = sl_btmesh_config_client_add_model_sub(network_id, provisionee_addr, 0, vendor_id, model_id, sub_address, &handle);
 
@@ -744,17 +746,17 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       break;
     case sl_btmesh_evt_config_client_model_sub_status_id:
       result = evt->data.evt_config_client_model_sub_status.result;
-      if(result == SL_STATUS_OK) {
+      if (result == SL_STATUS_OK) {
         app_log(" sub add OK\r\n");
         _sConfig.num_sub_done++;
-        if(_sConfig.num_sub_done < _sConfig.num_sub) {
+        if (_sConfig.num_sub_done < _sConfig.num_sub) {
           // move to next step which is configuring subscription settings
           // get the next model/address pair from the configuration list:
           model_id = _sConfig.sub_model[_sConfig.num_sub_done].model_id;
           vendor_id = _sConfig.sub_model[_sConfig.num_sub_done].vendor_id;
           sub_address = _sConfig.sub_address[_sConfig.num_sub_done];
 
-          app_log("SUB ADD, config %d/%d: model %4.4x -> address %4.4x\r\n", _sConfig.num_sub_done+1, _sConfig.num_sub, model_id, sub_address);
+          app_log("SUB ADD, config %d/%d: model %4.4x -> address %4.4x\r\n", _sConfig.num_sub_done + 1, _sConfig.num_sub, model_id, sub_address);
 
           sc = sl_btmesh_config_client_add_model_sub(network_id, provisionee_addr, 0, vendor_id, model_id, sub_address, &handle);
 
@@ -785,8 +787,8 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       break;
     default:
       app_log("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                  (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                  (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
       break;
   }
 
@@ -798,26 +800,25 @@ void provisionBLEMeshStack_app(eMesh_Prov_Node_t eStrategy)
   uint8_t dev_idx; /* array index */
   sl_status_t sc;
 
-  if(    ( eMESH_PROV_ALL == eStrategy )
-      || ( eMESH_PROV_NEXT == eStrategy )
-    ) {
-    for( dev_idx = 0; dev_idx < MAX_NUM_BTMESH_DEV; dev_idx++ ) {
-
+  if (    (eMESH_PROV_ALL == eStrategy)
+          || (eMESH_PROV_NEXT == eStrategy)
+          ) {
+    for ( dev_idx = 0; dev_idx < MAX_NUM_BTMESH_DEV; dev_idx++ ) {
       /* check if non null and unprovisioned */
-      if(  (   ( 0x00 != bluetooth_device_table[dev_idx].address.addr[0] )
-            || ( 0x00 != bluetooth_device_table[dev_idx].address.addr[1] )
-            || ( 0x00 != bluetooth_device_table[dev_idx].address.addr[2] )
-            || ( 0x00 != bluetooth_device_table[dev_idx].address.addr[3] )
-            || ( 0x00 != bluetooth_device_table[dev_idx].address.addr[4] )
-            || ( 0x00 != bluetooth_device_table[dev_idx].address.addr[5] ) )
-         && ( 0x00 == bluetooth_device_table[dev_idx].is_provisioned )
-        ) {
+      if (  (   (0x00 != bluetooth_device_table[dev_idx].address.addr[0])
+                || (0x00 != bluetooth_device_table[dev_idx].address.addr[1])
+                || (0x00 != bluetooth_device_table[dev_idx].address.addr[2])
+                || (0x00 != bluetooth_device_table[dev_idx].address.addr[3])
+                || (0x00 != bluetooth_device_table[dev_idx].address.addr[4])
+                || (0x00 != bluetooth_device_table[dev_idx].address.addr[5]) )
+            && (0x00 == bluetooth_device_table[dev_idx].is_provisioned)
+            ) {
         /* provisioning using ADV bearer (this is the default) */
         sl_btmesh_prov_create_provisioning_session(network_id, bluetooth_device_table[dev_idx].uuid, 0);
 
         sc = sl_btmesh_prov_set_oob_requirements(bluetooth_device_table[dev_idx].uuid,
                                                  0,
-                                                 (sl_btmesh_node_auth_method_flag_static|sl_btmesh_node_auth_method_flag_output),
+                                                 (sl_btmesh_node_auth_method_flag_static | sl_btmesh_node_auth_method_flag_output),
                                                  sl_btmesh_node_oob_output_action_flag_blink,
                                                  sl_btmesh_node_oob_input_action_flag_push,
                                                  1,
@@ -826,13 +827,15 @@ void provisionBLEMeshStack_app(eMesh_Prov_Node_t eStrategy)
         sc = sl_btmesh_prov_provision_adv_device(bluetooth_device_table[dev_idx].uuid);
         if (sc == SL_STATUS_OK) {
           app_log("Provisioning success: ");
-          bluetooth_device_table[dev_idx].is_provisioned=0x01;
+          bluetooth_device_table[dev_idx].is_provisioned = 0x01;
         } else {
-          app_log("Provisioning fail %lX: ",sc);
+          app_log("Provisioning fail %lX: ", sc);
         }
 
-        app_log("(net id) %d (uuid) ",network_id);
-        for (uint8_t i = 0; i < BLE_MESH_UUID_LEN_BYTE; i++) app_log("0x%.2x", bluetooth_device_table[dev_idx].uuid.data[i]);
+        app_log("(net id) %d (uuid) ", network_id);
+        for (uint8_t i = 0; i < BLE_MESH_UUID_LEN_BYTE; i++) {
+          app_log("0x%.2x", bluetooth_device_table[dev_idx].uuid.data[i]);
+        }
         app_log("\r\n");
 
         break;
@@ -850,22 +853,22 @@ static int8_t IsDevPresent(const uint8_t * restrict const addr)
   int8_t res_val;
 
   /* Initialize locals */
-  res_val=-1; /* Pessimistic assumption, dev isn't present */
-  pdata=NULL;
+  res_val = -1; /* Pessimistic assumption, dev isn't present */
+  pdata = NULL;
 
-  for( idx=0; idx < MAX_NUM_BTMESH_DEV; idx++ ) {
-      pdata=(uint8_t*)(&bluetooth_device_table[idx].address.addr[0]);
+  for ( idx = 0; idx < MAX_NUM_BTMESH_DEV; idx++ ) {
+    pdata = (uint8_t*)(&bluetooth_device_table[idx].address.addr[0]);
 
-      if(   ( addr[0] == pdata[0] )
-         && ( addr[1] == pdata[1] )
-         && ( addr[2] == pdata[2] )
-         && ( addr[3] == pdata[3] )
-         && ( addr[4] == pdata[4] )
-         && ( addr[5] == pdata[5] )
-        ) {
-        res_val=idx;
-        break;
-      }
+    if (   (addr[0] == pdata[0])
+           && (addr[1] == pdata[1])
+           && (addr[2] == pdata[2])
+           && (addr[3] == pdata[3])
+           && (addr[4] == pdata[4])
+           && (addr[5] == pdata[5])
+           ) {
+      res_val = idx;
+      break;
+    }
   }
 
   return res_val;
@@ -877,20 +880,20 @@ static void config_check()
 
   memset(&_sConfig, 0, sizeof(_sConfig));
   // scan the SIG models in the DCD data
-  for(i = 0; i < _sDCD_Prim.numSIGModels; i++) {
-    if(_sDCD_Prim.SIG_models[i] == SWITCH_MODEL_ID) {
+  for (i = 0; i < _sDCD_Prim.numSIGModels; i++) {
+    if (_sDCD_Prim.SIG_models[i] == SWITCH_MODEL_ID) {
       config_pub_add(SWITCH_MODEL_ID, 0xFFFF, LIGHT_CTRL_GRP_ADDR);
       config_sub_add(SWITCH_MODEL_ID, 0xFFFF, LIGHT_STATUS_GRP_ADDR);
       config_bind_add(SWITCH_MODEL_ID, 0xFFFF);
-    } else if(_sDCD_Prim.SIG_models[i] == LIGHT_MODEL_ID) {
+    } else if (_sDCD_Prim.SIG_models[i] == LIGHT_MODEL_ID) {
       config_pub_add(LIGHT_MODEL_ID, 0xFFFF, LIGHT_STATUS_GRP_ADDR);
       config_sub_add(LIGHT_MODEL_ID, 0xFFFF, LIGHT_CTRL_GRP_ADDR);
       config_bind_add(LIGHT_MODEL_ID, 0xFFFF);
-    } else if(_sDCD_Prim.SIG_models[i] == DIM_SWITCH_MODEL_ID) {
+    } else if (_sDCD_Prim.SIG_models[i] == DIM_SWITCH_MODEL_ID) {
       config_pub_add(DIM_SWITCH_MODEL_ID, 0xFFFF, LIGHT_CTRL_GRP_ADDR);
       config_sub_add(DIM_SWITCH_MODEL_ID, 0xFFFF, LIGHT_STATUS_GRP_ADDR);
       config_bind_add(DIM_SWITCH_MODEL_ID, 0xFFFF);
-    } else if(_sDCD_Prim.SIG_models[i] == DIM_LIGHT_MODEL_ID) {
+    } else if (_sDCD_Prim.SIG_models[i] == DIM_LIGHT_MODEL_ID) {
       config_pub_add(DIM_LIGHT_MODEL_ID, 0xFFFF, LIGHT_STATUS_GRP_ADDR);
       config_sub_add(DIM_LIGHT_MODEL_ID, 0xFFFF, LIGHT_CTRL_GRP_ADDR);
       config_bind_add(DIM_LIGHT_MODEL_ID, 0xFFFF);
@@ -939,8 +942,7 @@ void app_button_press_cb(uint8_t button, uint8_t duration)
 #endif
       break;
     case APP_BUTTON_PRESS_DURATION_VERYLONG:
-      if (button == BUTTON_PRESS_BUTTON_1)
-      {
+      if (button == BUTTON_PRESS_BUTTON_1) {
         app_log("list unprovisioned devices\n");
         provisionBLEMeshStack_app(eMESH_PROV_NEXT);
       }

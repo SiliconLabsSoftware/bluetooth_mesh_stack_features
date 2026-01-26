@@ -56,7 +56,7 @@ extern "C" {
   "l - List nodes in the network\n"                         \
   "i - Information about a node in the network\n"           \
   "r - Remove node from the network\n"                      \
-  "v - Exclude node from the network\n"                      \
+  "v - Exclude node from the network\n"                     \
   "k - Refresh the network key and app key\n"               \
   "x - Export the network keys, app keys and device keys\n" \
   "e - Reset provisioner node and exit application\n"       \
@@ -94,7 +94,7 @@ sl_ui_state btmesh_app_prov_ui_get_ui_state(void);
  * @param[out] ui_input_buffer data read from input console
  * @retval Current state of the ui
  * @retval false if buffer is empty or content is invalid
- *         true if buffer content vas updated with is valid data
+ *         true if buffer content was updated with is valid data
  *****************************************************************************/
 bool btmesh_app_prov_ui_get_input_buffer(char **ui_input_buffer);
 

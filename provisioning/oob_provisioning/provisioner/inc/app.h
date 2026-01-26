@@ -43,7 +43,7 @@
 
 /* Provisioning strategy */
 typedef enum {
-  eMESH_PROV_ALL=0,
+  eMESH_PROV_ALL = 0,
   eMESH_PROV_NEXT
 } eMesh_Prov_Node_t;
 
