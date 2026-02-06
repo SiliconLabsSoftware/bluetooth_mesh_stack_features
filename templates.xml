@@ -336,4 +336,32 @@
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Bluetooth\ Mesh"/>
   </descriptors>
+  <descriptors name="bt_cs_mesh_soc_initiator_light" label="Bluetooth - SoC CS-Mesh Initiator-Light" description="Combined Channel Sounding Initiator / Bluetooth Mesh Light example project">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="network/mesh_channel_sounding/SimplicityStudio/bt_cs_mesh_soc_initiator_light.slcp"/>
+    <properties key="readmeFiles" value="network/mesh_channel_sounding/README.md"/>
+    <properties key="boardCompatibility" value="brd2606a brd4198a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32[bm]g24[^l].* .*bgm241sd22vna.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Bluetooth Mesh Examples"/>
+    <properties key="quality" value="DEVELOPMENT"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Bluetooth\ Mesh"/>
+  </descriptors>
+  <descriptors name="bt_cs_mesh_soc_reflector_switch" label="Bluetooth - SoC CS-Mesh Reflector-Switch" description="Combined Channel Sounding Reflector / Bluetooth Mesh Switch example project">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="universal\ configurator"/>
+    <properties key="projectFilePaths" value="network/mesh_channel_sounding/SimplicityStudio/bt_cs_mesh_soc_reflector_switch.slcp"/>
+    <properties key="readmeFiles" value="network/mesh_channel_sounding/README.md"/>
+    <properties key="boardCompatibility" value="brd2606a brd4198a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32[bm]g24.* .*bgm241sd22vna.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Bluetooth Mesh Examples"/>
+    <properties key="quality" value="DEVELOPMENT"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Device\ Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Bluetooth\ Mesh"/>
+  </descriptors>
 </model:MDescriptors>
