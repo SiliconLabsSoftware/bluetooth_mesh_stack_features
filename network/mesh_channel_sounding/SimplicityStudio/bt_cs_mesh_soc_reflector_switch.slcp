@@ -1,0 +1,120 @@
+project_name: bt_cs_mesh_soc_reflector_switch
+package: Bluetooth
+label: Bluetooth - SoC CS-Mesh Reflector-Switch
+description: Combined Channel Sounding Reflector / Bluetooth Mesh Switch example project
+category: Bluetooth Mesh Examples
+quality: development
+
+filter:
+  - name: "Wireless Technology"
+    value: ["Bluetooth Mesh"]
+  - name: "Device Type"
+    value: ["SoC"]
+  - name: "Project Difficulty"
+    value: ["Advanced"]
+
+component:
+  - id: toolchain_gcc
+  - id: bluetooth_stack
+  - id: gatt_configuration
+  - id: gatt_service_device_information_override
+  - id: bluetooth_feature_legacy_advertiser
+  - id: bluetooth_feature_connection_role_peripheral
+  - id: bluetooth_feature_gatt
+  - id: bluetooth_feature_gatt_server
+  - id: bluetooth_feature_extended_scanner
+  - id: bluetooth_feature_sm
+  - id: bluetooth_feature_system
+  - id: app_assert
+  - id: app_log
+  - id: cs_reflector
+  - id: cs_antenna
+  - id: mpu
+  - id: in_place_ota_dfu
+  - id: sl_main
+  - id: clock_manager
+  - id: device_init
+  - id: ble_peer_manager_common
+  - id: ble_peer_manager_peripheral
+  - id: app_button_press
+  - id: btmesh_lighting_client
+  - id: btmesh_provisionee
+  - id: btmesh_stack_gatt_prov_bearer
+  - id: btmesh_stack_proxy
+  - id: btmesh_stack_proxy_server
+
+source:
+  - path: ../reflector_switch/src/app.c
+
+include:
+  - path: ../reflector_switch/inc/
+    file_list:
+    - path: app.h
+
+config_file:
+  - override:
+      component: gatt_configuration
+      file_id: gatt_configuration_file_id
+    path: ../reflector_switch/config/gatt_configuration.btconf
+    directory: btconf
+  - override:
+      component: btmesh_dcd_configuration
+      file_id: dcd_configuration_file_id
+    path: ../reflector_switch/config/dcd_config.btmeshconf
+    directory: btmeshconf
+
+readme:
+  - path: ../README.md
+
+configuration:
+  - name: SL_STACK_SIZE
+    value: 4096
+  - name: SL_BT_CONFIG_BUFFER_SIZE
+    value: 30000
+  - name: SL_BT_CONFIG_MAX_CS_PROCEDURES
+    value: 1
+  - name: SL_BT_CONTROLLER_CONN_EVENT_LENGTH_EXTENSION
+    value: 1
+  - name: SL_PSA_KEY_USER_SLOT_COUNT
+    value: "0"
+    condition:
+      - psa_crypto
+  - name: SL_CLOCK_MANAGER_HFXO_FREQ
+    value: 40000000
+    unless:
+      - hardware_board
+  - name: SL_IOSTREAM_USART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
+    value: 0
+    unless:
+      - cli
+  - name: SL_IOSTREAM_EUSART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
+    value: 0
+    unless:
+      - cli
+  - name: SL_BOARD_ENABLE_VCOM
+    value: 1
+  - name: CS_REFLECTOR_ANTENNA_OFFSET
+    value: 0
+  - name: BLE_PEER_MANAGER_PERIPHERAL_CONFIG_ADV_PHY
+    value: sl_bt_gap_phy_2m
+  - name: APP_LOG_LEVEL_FILTER_THRESHOLD
+    value: APP_LOG_LEVEL_INFO
+
+template_contribution:
+  - name: ble_peer_manager_event_handler
+    value:
+      include: app.h
+      handler: ble_peer_manager_on_event_reflector
+
+post_build:
+  - profile: bt_common
+    condition: [device_series_2, bootloader_app_properties]
+
+tag:
+  - hardware:rf:band:2400
+  - prebuilt_demo
+
+ui_hints:
+  highlight:
+    - path: readme.md
+      focus: true
