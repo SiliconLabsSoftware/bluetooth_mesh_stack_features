@@ -33,14 +33,15 @@ This repository contains example projects which demonstrate the features of the 
 
 ### Embedded firmware examples
 
-- Models - **BLOB Transfer Model Examples** (Server/Client) ----- *NEW*
+- Models - **BLOB Transfer Model Examples** (Server/Client)
 - Models - **HSL Lighting Client Example**
 - Models - **Switch NCP Host Example**
 - Models - **Vendor Specific Model Examples** (Server/Client)
+- Network - **Heartbeat Provisioner Example**
 - Network - **IV Recovery Example**
 - Network - **IV Update Example**
+- Network - **Mesh & Channel Sounding Examples** (Light/Switch) ----- *NEW*
 - Network - **Scanning BLE beacons in Bluetooth Mesh mode Example**
-- Network - **Heartbeat Provisioner Example** ----- *NEW*
 - Node - **Node Memory Reset i.e. Erase NVM Example**
 - Provisioning - **Embedded Provisioner Example**
 - Provisioning - **Host Provisioner Example**
@@ -54,7 +55,7 @@ This repository contains example projects which demonstrate the features of the 
 - ADK -  **Reduction of GATT Connections for Provisioning with Configuration**
 
 ### Usage
-- The examples can be constructed manually following the individual README files, but for user convenience, the cloned repository can be added to Simplicity Studio 5 following the steps below:
+- The examples can be constructed manually following the individual README files, but for user convenience, the cloned repository can be added to Simplicity Studio 5 following the steps below (Studio 6 is not yet supported):
 - Clone the repository with git
 - Open the ```Preferences``` and browse to ```Simplicity Studio``` > ```External Repos```
 ![preferences](images/preferences.png)
