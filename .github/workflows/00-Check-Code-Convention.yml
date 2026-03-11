@@ -41,5 +41,5 @@ jobs:
         uses: SiliconLabsSoftware/devs-coding-convention-tool@master
         with:
           exclude-regex: ""
-          codespell-ignore-words: ""
+          codespell-ignore-words: "doubleClick"
           codespell-skip-paths: ""

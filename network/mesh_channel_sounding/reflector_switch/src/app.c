@@ -275,8 +275,8 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
     // Default event handler
     default:
       app_log("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+              (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
       break;
   }
 }
@@ -317,8 +317,8 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
       app_log_info(APP_PREFIX "sl_btmesh_evt_node_provisioned_id" APP_LOG_NL);
 
       /*cs_initiator_display_start_scanning();
-      // Start scanning for reflector connections
-      log_info(APP_PREFIX "Scanning started for reflector connections..." NL);*/
+         // Start scanning for reflector connections
+         log_info(APP_PREFIX "Scanning started for reflector connections..." NL);*/
     } break;
     case sl_btmesh_evt_proxy_connected_id: {
       app_log_info(APP_PREFIX "sl_btmesh_evt_proxy_connected_id" APP_LOG_NL);
@@ -329,8 +329,8 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
     // Default event handler.
     default:
       app_log_info("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                        (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                        (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
+                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+                   (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
       break;
   }
 }

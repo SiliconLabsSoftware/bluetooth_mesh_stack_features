@@ -830,7 +830,7 @@ void sl_bt_on_event(sl_bt_msg_t * evt)
     }
     case sl_bt_evt_connection_parameters_id:
       // Only Reflector connections are handled by the Peer Manager
-      if(ble_peer_manager_is_conn_handle_in_array(evt->data.evt_connection_parameters.connection)) {
+      if (ble_peer_manager_is_conn_handle_in_array(evt->data.evt_connection_parameters.connection)) {
         sc = get_instance_number(evt->data.evt_connection_parameters.connection, &instance_num);
         // Initiator instance not created yet
         if (sc != SL_STATUS_OK) {
@@ -943,7 +943,7 @@ void sl_bt_on_event(sl_bt_msg_t * evt)
     }
     case sl_bt_evt_connection_opened_id:
       // Only Reflector connections are handled by the Peer Manager
-      if(ble_peer_manager_is_conn_handle_in_array(evt->data.evt_connection_opened.connection)) {
+      if (ble_peer_manager_is_conn_handle_in_array(evt->data.evt_connection_opened.connection)) {
         log_info(APP_INSTANCE_PREFIX "Connection opened as central with CS Reflector"
                                      " '%02X:%02X:%02X:%02X:%02X:%02X'" NL,
                  evt->data.evt_connection_opened.connection,
@@ -970,7 +970,7 @@ void sl_bt_on_event(sl_bt_msg_t * evt)
 
     case sl_bt_evt_connection_closed_id:
       // Only Reflector connections are handled by the Peer Manager
-      if(ble_peer_manager_is_conn_handle_in_array(evt->data.evt_connection_closed.connection)) {
+      if (ble_peer_manager_is_conn_handle_in_array(evt->data.evt_connection_closed.connection)) {
         sc = cs_initiator_delete(evt->data.evt_connection_closed.connection);
         if ((sc == SL_STATUS_NOT_FOUND) || (sc == SL_STATUS_INVALID_HANDLE)) {
           log_info(APP_INSTANCE_PREFIX "Initiator instance not found" NL, evt->data.evt_connection_closed.connection);
@@ -989,11 +989,11 @@ void sl_bt_on_event(sl_bt_msg_t * evt)
       break;
 
     case sl_bt_evt_scanner_legacy_advertisement_report_id:
-      match = !ble_peer_manager_is_bt_address_already_connected(&(evt->data.evt_scanner_legacy_advertisement_report.address)) &&
-              ble_peer_manager_find_match(&(evt->data.evt_scanner_legacy_advertisement_report.address),
-                                          evt->data.evt_scanner_legacy_advertisement_report.address_type,
-                                          evt->data.evt_scanner_legacy_advertisement_report.rssi,
-                                          &(evt->data.evt_scanner_legacy_advertisement_report.data));
+      match = !ble_peer_manager_is_bt_address_already_connected(&(evt->data.evt_scanner_legacy_advertisement_report.address))
+              && ble_peer_manager_find_match(&(evt->data.evt_scanner_legacy_advertisement_report.address),
+                                             evt->data.evt_scanner_legacy_advertisement_report.address_type,
+                                             evt->data.evt_scanner_legacy_advertisement_report.rssi,
+                                             &(evt->data.evt_scanner_legacy_advertisement_report.data));
       if (match) {
         log_info(APP_PREFIX "Match found" NL);
         log_info(APP_PREFIX "Bluetooth %s address: %02X:%02X:%02X:%02X:%02X:%02X\n",
@@ -1025,11 +1025,11 @@ void sl_bt_on_event(sl_bt_msg_t * evt)
       break;
 
     case sl_bt_evt_scanner_extended_advertisement_report_id:
-      match = !ble_peer_manager_is_bt_address_already_connected(&(evt->data.evt_scanner_extended_advertisement_report.address)) &&
-              ble_peer_manager_find_match(&(evt->data.evt_scanner_extended_advertisement_report.address),
-                                          evt->data.evt_scanner_extended_advertisement_report.address_type,
-                                          evt->data.evt_scanner_extended_advertisement_report.rssi,
-                                          &(evt->data.evt_scanner_extended_advertisement_report.data));
+      match = !ble_peer_manager_is_bt_address_already_connected(&(evt->data.evt_scanner_extended_advertisement_report.address))
+              && ble_peer_manager_find_match(&(evt->data.evt_scanner_extended_advertisement_report.address),
+                                             evt->data.evt_scanner_extended_advertisement_report.address_type,
+                                             evt->data.evt_scanner_extended_advertisement_report.rssi,
+                                             &(evt->data.evt_scanner_extended_advertisement_report.data));
       if (match) {
         log_info(APP_PREFIX "Match found" NL);
         log_info(APP_PREFIX "Bluetooth %s address: %02X:%02X:%02X:%02X:%02X:%02X\n",
@@ -1071,8 +1071,8 @@ void sl_bt_on_event(sl_bt_msg_t * evt)
 
     default:
       log_info("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                         (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                         (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
+               (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+               (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
       break;
   }
 }
@@ -1149,8 +1149,8 @@ void sl_btmesh_on_event(sl_btmesh_msg_t *evt)
     // Default event handler.
     default:
       log_info("unhandled evt: %8.8x class %2.2x method %2.2x\r\n", (unsigned int)SL_BT_MSG_ID(evt->header),
-                                                                    (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
-                                                                    (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
+               (unsigned int)((SL_BT_MSG_ID(evt->header) >> 16) & 0xFF),
+               (unsigned int)((SL_BT_MSG_ID(evt->header) >> 24) & 0xFF) );
       break;
   }
 }
