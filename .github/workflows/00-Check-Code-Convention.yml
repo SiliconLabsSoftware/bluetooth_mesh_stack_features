@@ -15,7 +15,7 @@ on:
 jobs:
   job1:
     name: Check coding convention
-    runs-on: [self-hosted, jammy]
+    runs-on: ubuntu-24.04
     steps:
       - name: Trigger
         run: echo "Triggered by ${{github.event_name}} event"
