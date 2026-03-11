@@ -1302,7 +1302,7 @@ int str2uint(const char *input,
 }
 
 /**
- * @brief	int2str   - Conver unsigned integer to string
+ * @brief	int2str   - Converts unsigned integer to string
  *
  * @param	input			- Integer to convert
  * @param	base_type - Hex or Dec
