@@ -6,9 +6,9 @@ This example duplicates the functionalities of the SDK example - soc-btmesh-swit
 
 ## Hardware & SDK Requirements
 
-- IDE – [Simplicity Studio 5](https://www.silabs.com/developers/simplicity-studio)
-- SDK – Bluetooth Mesh SDK 2.0.0 GA or newer, the latest version is always recommended. Included with the Gecko SDK 3.1.0 or later.
-- NCP target – At least 1 Bluetooth Mesh compatible boards - EFR32xG12, EFR32xG13 or EFR32xG21 (x= M, B) based, SLWRB4104A and SLWRB4103A are recommended.
+- IDE: [Simplicity Studio 5](https://www.silabs.com/developers/simplicity-studio)
+- SDK: Bluetooth Mesh SDK 2.0.0 GA or newer, the latest version is always recommended. Included with the Gecko SDK 3.1.0 or later.
+- NCP target: At least 1 Bluetooth Mesh compatible boards - EFR32xG12, EFR32xG13 or EFR32xG21 (x= M, B) based, SLWRB4104A and SLWRB4103A are recommended.
 - NCP host - **POSIX compatible** machine to run the host application. Running the application on Windows needs some porting afford, this has only been tested with Linux and Cygwin.
 
 ## How to Use It

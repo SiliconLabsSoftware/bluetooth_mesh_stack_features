@@ -18,7 +18,7 @@ There are 2 ways for Bluetooth Mesh network to remove one or more nodes from the
 
 *Table 1. Comparison between Config Node Reset and Key Refresh*
 
-In addition to excluding node(s) from the network, the key refresh procedure is also capatible to refresh the application key(s), which results in excluding node(s) from some specific group(s) but remaining in the network. One note for refreshing the application keys, it's impossible to refresh only the application keys without refresh the bound network key.
+In addition to excluding node(s) from the network, the key refresh procedure is also capable of refreshing the application key(s), which results in excluding node(s) from some specific group(s) but remaining in the network. One note for refreshing the application keys, it's impossible to refresh only the application keys without refresh the bound network key.
 
 ## How Key Refresh Works
 
