@@ -1,3 +1,10 @@
+# \[Deprecation Notice\]
+
+> **This repository is deprecated and is no longer actively maintained.**
+
+This repository has been deprecated. It has been provided for historical reference only and should not be used. This repository will not be maintained. This code is subject to the quality disclaimer at the point in time prior to deprecation (2026-07-31) and superseded by this deprecation notice.
+
+
 <a href="https://www.bluetooth.com">
 <p align="center">
   <img src="https://www.bluetooth.com/wp-content/themes/bluetooth/images/logos/bluetooth-logo-color-black.svg">
